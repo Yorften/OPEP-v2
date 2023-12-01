@@ -12,7 +12,7 @@ if (isset($_SESSION['client_name'])) {
 } elseif (isset($_SESSION['admin_name'])) {
     header('location:dashboard.php');
     exit;
-} elseif (isset($_SESSION['admin_name'])) {
+} elseif (isset($_SESSION['administrator_name'])) {
     header('location:controlpanel.php');
     exit;
 }
