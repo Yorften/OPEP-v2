@@ -356,7 +356,7 @@ session_start();
 
     <main class="h-[53.9vh] bg-[url('/OPEP-v2/src/images/hero.webp')] bg-cover bg-no-repeat">
         <div class="flex flex-col items-start justify-center h-full w-[40%] ml-[10%] gap-4">
-            <h1 class="text-[42px] text-white font-medium stroke-1 stroke-black">Your online shop for houseplants and more!</h1>
+            <h1 class="text-[42px] text-white font-medium stroke-2 stroke-black">Your online shop for houseplants and more!</h1>
             <a href="src/pages/catalog.php" class="text-md font-medium p-2 w-42 bg-amber-300 border-2 border-amber-400 rounded-2xl">Shop all plants</a>
         </div>
     </main>
