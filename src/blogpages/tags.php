@@ -29,7 +29,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                         <div id="categorynameERR" class="text-red-600 text-xs pl-3"></div>
                     </div>
                     <div class="flex justify-end mb-4">
-                        <input required type="submit" id="addTag" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Add categorie">
+                        <input required type="submit" id="addTag" name="submit" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Add categorie">
                     </div>
                 </form>
             </div>
