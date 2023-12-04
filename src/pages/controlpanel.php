@@ -27,18 +27,26 @@ if (!isset($_SESSION['administrator_name'])) {
                     <p class="text-black text-3xl">OPEP</p>
                 </a>
             </div>
-            <p class="text-xl font-bold">Navigation</p>
+            <p class="text-xl font-bold">Control Panel</p>
             <div class="flex flex-col justify-evenly h-full">
-                <a href="dashboard-index.php" target="contentFrame">Control Panel</a>
-                <hr class="border-black w-full">
-                <a href="categories.php" target="contentFrame">View Categories</a>
-                <hr class="border-black w-full">
-                <a href="plants.php" target="contentFrame">View Plants</a>
+                <div class="flex flex-col">
+                    <p class=" font-semibold">PRODUCTS</p>
+                    <a href="dashboard-index.php" target="contentFrame">Commands</a>
+                    <a href="categories.php" target="contentFrame">Categories</a>
+                    <a href="plants.php" target="contentFrame">Plants</a>
+                </div>
                 <hr class="border-black w-full">
                 <div class="flex flex-col">
                     <p class=" font-semibold">ACCOUNTS</p>
-                    <a href="users.php" target="contentFrame">View Users</a>
-                    <a href="mods.php" target="contentFrame">View Moderators</a>
+                    <a href="users.php" target="contentFrame">Users</a>
+                    <a href="mods.php" target="contentFrame">Moderators</a>
+                </div>
+                <hr class="border-black w-full">
+                <div class="flex flex-col">
+                    <p class=" font-semibold">BLOG</p>
+                    <a href="../blogpages/tags.php" target="contentFrame">Tags</a>
+                    <a href="../blogpages/themes.php" target="contentFrame">Themes</a>
+                    <a href="../blogpages/articles.php" target="contentFrame">Articles</a>
                 </div>
             </div>
         </div>

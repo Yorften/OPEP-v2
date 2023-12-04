@@ -32,11 +32,24 @@ if (isset($_SESSION['administrator_name'])) {
             </div>
             <p class="text-xl font-bold">Navigation</p>
             <div class="flex flex-col justify-evenly h-full">
-                <a href="dashboard-index.php" target="contentFrame">Control Panel</a>
+                <div class="flex flex-col">
+                    <p class=" font-semibold">PRODUCTS</p>
+                    <a href="dashboard-index.php" target="contentFrame">Commands</a>
+                    <a href="categories.php" target="contentFrame">Categories</a>
+                    <a href="plants.php" target="contentFrame">Plants</a>
+                </div>
                 <hr class="border-black w-full">
-                <a href="categories.php" target="contentFrame">View Categories</a>
+                <div class="flex flex-col">
+                    <p class=" font-semibold">ACCOUNTS</p>
+                    <a href="users.php" target="contentFrame">Users</a>
+                </div>
                 <hr class="border-black w-full">
-                <a href="plants.php" target="contentFrame">View Plants</a> 
+                <div class="flex flex-col">
+                    <p class="font-semibold">BLOG</p>
+                    <a href="../blogpages/tags.php" target="contentFrame">Tags</a>
+                    <a href="../blogpages/themes.php" target="contentFrame">Themes</a>
+                    <a href="../blogpages/articles.php" target="contentFrame">Articles</a>
+                </div>
             </div>
         </div>
         <!-- Content -->
