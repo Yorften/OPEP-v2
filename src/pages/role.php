@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
         }
         $select = "SELECT * FROM users WHERE userId = ?";
         $stmt = $conn->prepare($select);
-        $stmt->bind_param("i", $_GET['id']);
+        $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
         $stmt = $conn->prepare($update);
         if ($stmt) {
             $role = 2;
-            $stmt->bind_param("ii", $role, $id);
+            $stmt->bind_param("ii", $role, $userId);
             $stmt->execute();
             $stmt->close();
         } else {

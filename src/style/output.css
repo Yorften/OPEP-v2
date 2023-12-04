@@ -746,8 +746,8 @@ video {
   height: 475px;
 }
 
-.h-\[54vh\] {
-  height: 54vh;
+.h-\[53\.9vh\] {
+  height: 53.9vh;
 }
 
 .h-\[5vh\] {
@@ -777,18 +777,6 @@ video {
 
 .h-full {
   height: 100%;
-}
-
-.h-\[53vh\] {
-  height: 53vh;
-}
-
-.h-\[53\.8vh\] {
-  height: 53.8vh;
-}
-
-.h-\[53\.9vh\] {
-  height: 53.9vh;
 }
 
 .w-1\/2 {
@@ -1240,8 +1228,8 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-\[url\(\'\/OPEP\/src\/images\/hero\.webp\'\)\] {
-  background-image: url('/OPEP/src/images/hero.webp');
+.bg-\[url\(\'\/OPEP-v2\/src\/images\/hero\.webp\'\)\] {
+  background-image: url('/OPEP-v2/src/images/hero.webp');
 }
 
 .bg-cover {
@@ -1260,8 +1248,8 @@ video {
   stroke: #000;
 }
 
-.stroke-1 {
-  stroke-width: 1;
+.stroke-2 {
+  stroke-width: 2;
 }
 
 .object-contain {
