@@ -4,7 +4,7 @@ include("../includes/conn.php");
 session_start();
 
 
-if (isset($_SESSION['administrator_name'])) {
+if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
 
     $id = $_GET['id'];
     if ($_GET['status'] == 1) {

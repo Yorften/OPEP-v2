@@ -2,14 +2,9 @@
 include("../includes/conn.php");
 session_start();
 
-if (!isset($_SESSION['administrator_name'])) {
-    echo "You don't have permission";
-    exit;
-}
+if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { ?>
 
-?>
-
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -139,3 +134,9 @@ if (!isset($_SESSION['administrator_name'])) {
 </body>
 
 </html>
+    
+<?php } else echo "You don't have permission";
+exit;
+
+?>
+

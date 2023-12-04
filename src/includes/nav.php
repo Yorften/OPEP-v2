@@ -68,7 +68,7 @@
              </li>
              <li>
                  <a href="../blogpages/blog.php">
-                     <span>ABOUT US</span>
+                     <span>BLOG</span>
                  </a>
              </li>
          <?php endif  ?>
