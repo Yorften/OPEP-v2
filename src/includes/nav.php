@@ -66,6 +66,11 @@
                      <span>ABOUT US</span>
                  </a>
              </li>
+             <li>
+                 <a href="../blogpages/blog.php">
+                     <span>ABOUT US</span>
+                 </a>
+             </li>
          <?php endif  ?>
      </ul>
 
@@ -213,29 +218,34 @@
          <?php endif ?>
          <?php if (isset($_SESSION['administrator_name'])) : ?>
              <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
-                 <a href="src/pages/controlpanel.php">
+                 <a href="controlpanel.php">
                      <span>CONTROLPANEL</span>
                  </a>
              </div>
          <?php elseif (isset($_SESSION['admin_name'])) : ?>
              <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
-                 <a href="src/pages/dashboard.php">
+                 <a href="dashboard.php">
                      <span>DASHBOARD</span>
                  </a>
              </div>
          <?php else : ?>
              <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
-                 <a href="#">
+                 <a href="../../index.php">
                      <span>HOME</span>
                  </a>
              </div>
              <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
-                 <a href="src/pages/catalog.php">
+                 <a href="catalog.php">
                      <span>CATALOG</span>
                  </a>
              </div>
              <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
-                 <a href="src/pages/about.php">
+                 <a href="about.php">
+                     <span>ABOUT US</span>
+                 </a>
+             </div>
+             <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
+                 <a href="../blogpages/blog.php">
                      <span>ABOUT US</span>
                  </a>
              </div>
