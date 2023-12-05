@@ -18,7 +18,7 @@ const addTag = (event) => {
   var input_form = document.getElementById("input_form");
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
+  xhr.open("POST", "http:../blogpages/crudTags.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
       getTags();
@@ -43,7 +43,7 @@ addbtn.addEventListener("click", addTag);
 
 function deleteTag(tagId) {
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
+  xhr.open("POST", "../blogpages/crudTags.php", true);
   const data = JSON.stringify({ tagId: tagId });
   xhr.send(data);
   xhr.onload = () => {
@@ -62,7 +62,7 @@ function showTagDetails(tagId2) {
   let tagName = document.getElementById("tagname2");
   document.getElementById("tagId2").value = tagId2;
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
+  xhr.open("POST", "http:../blogpages/crudTags.php", true);
   xhr.responseType = "json";
   xhr.onload = () => {
     if (xhr.status === 200) {
@@ -85,7 +85,7 @@ document.getElementById("modifyTag").addEventListener("click", (event) => {
   var tagId = document.getElementById("tagId2").value;
   var modify_form = document.getElementById("modify_form");
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
+  xhr.open("POST", "http:../blogpages/crudTags.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
       getTags();
@@ -108,7 +108,7 @@ document.getElementById("modifyTag").addEventListener("click", (event) => {
 function getTags() {
   const tags = document.getElementById("tags");
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
+  xhr.open("GET", "../blogpages/crudTags.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
       let data = xhr.response;
