@@ -105,7 +105,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
                                 <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$id</td>
                                 <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$name</td>
                                 <td class='px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>
-                                    <button onclick='showTagDetails($id)' class='px-2 rounded-md bg-amber-500'> Modify </button>
+                                    <button onclick=\"showTagDetails('$name',$id)\" class='px-2 rounded-md bg-amber-500'> Modify </button>
                                     <button onclick='deleteTag($id)' class='px-2 rounded-md bg-red-500'> Delete </button>
                                 </td>
                             </tr>";

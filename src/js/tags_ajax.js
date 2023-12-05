@@ -57,26 +57,13 @@ function deleteTag(tagId) {
 // --------------------------------------------
 // Edit Tag
 
-function showTagDetails(tagId2) {
+function showTagDetails(tag, id) {
   document.getElementById("popupEdit").classList.remove("hidden");
   let tagName = document.getElementById("tagname2");
-  document.getElementById("tagId2").value = tagId2;
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http:../blogpages/crudTags.php", true);
-  xhr.responseType = "json";
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      let data = xhr.response;
-      for (var i in data) {
-        tagName.value = data[i].tagName;
-      }
-      console.log(xhr.response);
-    } else {
-      console.log("Error while sending request");
-    }
-  };
-  const data = JSON.stringify({ tagId2: tagId2 });
-  xhr.send(data);
+  let tagId = document.getElementById("tagId2");
+  tagName.value = tag;
+  tagId.value = id;
+ 
 }
 
 document.getElementById("modifyTag").addEventListener("click", (event) => {
