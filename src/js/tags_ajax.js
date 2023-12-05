@@ -7,6 +7,8 @@ window.onclick = function (event) {
     popup2.classList.add("hidden");
   }
 };
+// --------------------------------------------
+// Add Tag
 
 const addbtn = document.getElementById("addTag");
 
@@ -19,8 +21,7 @@ const addTag = (event) => {
   xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
-      parent.document.getElementById("contentFrame").src =
-        "../blogpages/tags.php";
+      getTags();
     } else {
       console.log("Error while sending request");
     }
@@ -37,6 +38,9 @@ const addTag = (event) => {
 
 addbtn.addEventListener("click", addTag);
 
+// --------------------------------------------
+// Delete Tag
+
 function deleteTag(tagId) {
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
@@ -44,13 +48,14 @@ function deleteTag(tagId) {
   xhr.send(data);
   xhr.onload = () => {
     if (xhr.status === 200) {
-      parent.document.getElementById("contentFrame").src =
-        "../blogpages/tags.php";
+      getTags();
     } else {
       console.log("Error while sending request");
     }
   };
 }
+// --------------------------------------------
+// Edit Tag
 
 function showTagDetails(tagId2) {
   document.getElementById("popupEdit").classList.remove("hidden");
@@ -72,7 +77,6 @@ function showTagDetails(tagId2) {
   };
   const data = JSON.stringify({ tagId2: tagId2 });
   xhr.send(data);
-  // parent.document.getElementById("contentFrame").src = "../blogpages/tags.php";
 }
 
 document.getElementById("modifyTag").addEventListener("click", (event) => {
@@ -84,8 +88,8 @@ document.getElementById("modifyTag").addEventListener("click", (event) => {
   xhr.open("POST", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
-      parent.document.getElementById("contentFrame").src =
-        "../blogpages/tags.php";
+      getTags();
+      document.getElementById("popupEdit").classList.add("hidden");
     } else {
       console.log("Error while sending request");
     }
@@ -98,3 +102,23 @@ document.getElementById("modifyTag").addEventListener("click", (event) => {
   xhr.send(data);
   modify_form.reset();
 });
+// --------------------------------------------
+// Show tags
+
+function getTags() {
+  const tags = document.getElementById("tags");
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost/opep-v2/src/blogpages/showTags.php", true);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      let data = xhr.response;
+      console.log(data);
+      tags.innerHTML = data;
+    } else {
+      console.log("Error while sending request");
+    }
+  };
+  xhr.send();
+}
+
+// --------------------------------------------

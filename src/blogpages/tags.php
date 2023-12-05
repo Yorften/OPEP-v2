@@ -71,13 +71,13 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                 <button onclick="openPopup()" class="p-2 pb-1 bg-green-700 mb-2 rounded-md">Add Tag +</button>
             </div>
             <div class="border-2 border-gray-300 rounded-xl h-[90vh] w-full flex">
-                <div id="clients" class="flex flex-col justify-between w-full p-4">
+                <div id="tags" class="flex flex-col justify-between w-full p-4">
                     <?php
                     $records = $conn->query("SELECT * FROM tags");
                     $rows = $records->num_rows;
 
                     $start = 0;
-                    $rows_per_page = 9;
+                    $rows_per_page = 8;
                     if (isset($_GET['page'])) {
                         $page = $_GET['page'] - 1;
                         $start = $page * $rows_per_page;
@@ -101,7 +101,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                     <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbody">
                                 <?php
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $name = htmlspecialchars($row['tagName']);
