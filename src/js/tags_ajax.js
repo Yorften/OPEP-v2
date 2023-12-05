@@ -24,7 +24,7 @@ const addTag = (event) => {
     error.parentElement.classList.add("bg-red-500");
     error.innerHTML = "Please write the tag's name";
     return 0;
-  } else if (regex.test(tagName) === true) {
+  } else if (regex.test(tagName) === false) {
     error.parentElement.classList.remove("bg-green-500");
     error.parentElement.classList.add("bg-red-500");
     error.innerHTML = "Please type a valid tag (one word)";
