@@ -108,7 +108,7 @@ document.getElementById("modifyTag").addEventListener("click", (event) => {
 function getTags() {
   const tags = document.getElementById("tags");
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://localhost/opep-v2/src/blogpages/showTags.php", true);
+  xhr.open("GET", "http://localhost/opep-v2/src/blogpages/crudTags.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
       let data = xhr.response;
