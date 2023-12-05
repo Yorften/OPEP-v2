@@ -61,6 +61,7 @@ if (!isset($_SESSION['administrator_name'])) {
     </div>
 
     <?php include("../includes/footer_admin.html") ?>
+
 </body>
 
 </html>

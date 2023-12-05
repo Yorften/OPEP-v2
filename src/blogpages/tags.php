@@ -20,16 +20,16 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                         <span onclick="closePopup()" class="text-2xl font-bold cursor-pointer mr-3">&times;</span>
                     </div>
                 </div>
-                <form method="post" class="flex flex-col justify-between items-center h-full mt-[10vh]">
+                <form id="input_form" class="flex flex-col justify-between items-center h-full mt-[10vh]">
                     <div class="flex flex-col mb-3">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
-                            <p class="text-xs">Tage name</p>
-                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="categoryname" type="text" name="tagname" placeholder="Name" autocomplete="off">
+                            <p class="text-xs">Tag name</p>
+                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagname" type="text" name="tagname" placeholder="Name" autocomplete="off">
                         </div>
                         <div id="categorynameERR" class="text-red-600 text-xs pl-3"></div>
                     </div>
                     <div class="flex justify-end mb-4">
-                        <input required type="submit" id="addTag" name="submit" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Add categorie">
+                        <input required type="submit" id="addTag" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Add tag">
                     </div>
                 </form>
             </div>
@@ -43,11 +43,18 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                         <span onclick="closePopup()" class="text-2xl font-bold cursor-pointer mr-3">&times;</span>
                     </div>
                 </div>
-                <form method="post" class="flex flex-col justify-between items-center h-full mt-[10vh]">
+                <form id="modify_form" class="flex flex-col justify-between items-center h-full mt-[10vh]">
                     <div class="flex flex-col mb-3">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
-                            <p class="text-xs">Tage name</p>
+                            <p class="text-xs">Tag name</p>
                             <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagname2" type="text" name="category" placeholder="Name" autocomplete="off" value="">
+                        </div>
+                        <div id="categorynameERR2" class="text-red-600 text-xs pl-3"></div>
+                    </div>
+                    <div class="flex flex-col mb-3 hidden">
+                        <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
+                            <p class="text-xs">Tag id</p>
+                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagId2" type="text" name="category" placeholder="Name" autocomplete="off" value="">
                         </div>
                         <div id="categorynameERR2" class="text-red-600 text-xs pl-3"></div>
                     </div>
@@ -63,14 +70,14 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                 <p class="border-gray-300 rounded-t-lg p-2 pb-1 text-xl">Tags</p>
                 <button onclick="openPopup()" class="p-2 pb-1 bg-green-700 mb-2 rounded-md">Add Tag +</button>
             </div>
-            <div class="border-2 border-gray-300 rounded-xl h-[90vh] flex">
-                <div id="clients" class="flex flex-col justify-between w-full p-4">
+            <div class="border-2 border-gray-300 rounded-xl h-[90vh] w-full flex">
+                <div id="tags" class="flex flex-col justify-between w-full p-4">
                     <?php
                     $records = $conn->query("SELECT * FROM tags");
                     $rows = $records->num_rows;
 
                     $start = 0;
-                    $rows_per_page = 9;
+                    $rows_per_page = 8;
                     if (isset($_GET['page'])) {
                         $page = $_GET['page'] - 1;
                         $start = $page * $rows_per_page;
@@ -90,27 +97,34 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                             <thead class="border">
                                 <tr class="border-2">
                                     <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tag Id</th>
-                                    <th class="w-2/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Name</th>
-                                    <th class="w-3/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Email</th>
+                                    <th class="w-3/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Name</th>
+                                    <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbody">
                                 <?php
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    $name = htmlspecialchars($row['tagName']);
-                                    $id = htmlspecialchars($row['tagId']);
+                                    $tagName = htmlspecialchars($row['tagName']);
+                                    $tagId = htmlspecialchars($row['tagId']);
 
                                 ?>
                                     <tr>
-                                        <td class="px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">' . $id . '</td>
-                                        <td class="px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">' . $name . '</td>
-                                        <td class="px-1 py-2 border-2 border-[#A3A3A3] text-xs md:text-base text-center flex w-full justify-between">
-                                            <button onclick="showTagDetails(<?= $id ?>)" class="px-2 rounded-md bg-amber-500"> Modify </button>
-                                            <button onclick="deleteTag(<?= $id ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
+                                        <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $tagId ?></td>
+                                        <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $tagName ?></td>
+                                        <td class="px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">
+                                            <button id="showdetails" onclick="showTagDetails('<?php echo $tagName; ?>',<?= $tagId ?>)" class="px-2 rounded-md bg-amber-500"> Modify </button>
+                                            <button onclick="deleteTag(<?= $tagId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
                                         </td>
                                     </tr>
 
                             <?php     }
+                            } else {
+                                
+                                ?>
+                                    <div class="w-full h-[100vh] flex items-center justify-center">
+                                        <p>No tags in database</p>
+                                    </div>
+                                <?php
                             }
                             ?>
                             </tbody>
@@ -171,6 +185,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
         </div>
 
         <script src="../js/popup.js"></script>
+        <script src="../js/tags_ajax.js"></script>
     </body>
 
     </html>
