@@ -5,6 +5,8 @@ module.exports = {
     "src/includes/*.html",
     "src/includes/*.php",
     "src/pages/*.php",
+    "src/blogpages/*.php",
+    "src/blog/*.php",
   ],
   theme: {
     extend: {},

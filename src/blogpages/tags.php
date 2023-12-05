@@ -12,6 +12,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
     </head>
 
     <body>
+        <div class="hidden bg-green-500"></div>
         <!-- Popup Structure -->
         <div id="popup" class="fixed w-full h-full top-0 left-0  items-center flex justify-center hidden z-50">
             <div class="bg-white w-7/12 h-fit border-2 border-amber-600 flex flex-col justify-start items-center overflow-y-auto rounded-2xl md:h-fit">
@@ -21,12 +22,14 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                     </div>
                 </div>
                 <form id="input_form" class="flex flex-col justify-between items-center h-full mt-[10vh]">
+                    <div class="mb-3 px-2 rounded-lg">
+                        <p id="addErr" class="text-black text-lg text-center"></p>
+                    </div>
                     <div class="flex flex-col mb-3">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
                             <p class="text-xs">Tag name</p>
-                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagname" type="text" name="tagname" placeholder="Name" autocomplete="off">
+                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagname" type="text" name="tagname" pattern="[a-zA-Z]+" placeholder="Name" autocomplete="off">
                         </div>
-                        <div id="categorynameERR" class="text-red-600 text-xs pl-3"></div>
                     </div>
                     <div class="flex justify-end mb-4">
                         <input required type="submit" id="addTag" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Add tag">
@@ -44,19 +47,20 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                     </div>
                 </div>
                 <form id="modify_form" class="flex flex-col justify-between items-center h-full mt-[10vh]">
+                    <div class="mb-3 px-2 rounded-lg">
+                        <p id="modErr" class="text-white text-lg text-center"></p>
+                    </div>
                     <div class="flex flex-col mb-3">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
                             <p class="text-xs">Tag name</p>
-                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagname2" type="text" name="category" placeholder="Name" autocomplete="off" value="">
+                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagname2" type="text" pattern="[a-zA-Z]+" name="tagname2" placeholder="Name" autocomplete="off" value="">
                         </div>
-                        <div id="categorynameERR2" class="text-red-600 text-xs pl-3"></div>
                     </div>
                     <div class="flex flex-col mb-3 hidden">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
                             <p class="text-xs">Tag id</p>
-                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagId2" type="text" name="category" placeholder="Name" autocomplete="off" value="">
+                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="tagId2" type="text" name="tagId2" placeholder="Name" autocomplete="off" value="">
                         </div>
-                        <div id="categorynameERR2" class="text-red-600 text-xs pl-3"></div>
                     </div>
                     <div class="flex justify-end mb-4">
                         <input required type="submit" id="modifyTag" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Apply changes">
@@ -117,14 +121,14 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                         </td>
                                     </tr>
 
-                            <?php     }
+                                <?php     }
                             } else {
-                                
+
                                 ?>
-                                    <div class="w-full h-[100vh] flex items-center justify-center">
-                                        <p>No tags in database</p>
-                                    </div>
-                                <?php
+                                <div class="w-full h-[100vh] flex items-center justify-center">
+                                    <p>No tags in database</p>
+                                </div>
+                            <?php
                             }
                             ?>
                             </tbody>
