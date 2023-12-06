@@ -196,7 +196,6 @@ document.getElementById("modifyTheme").addEventListener("click", (event) => {
   console.log(theme); 
   const data = JSON.stringify(theme);
   xhr.send(data);
-  modify_form.reset();
 });
 // --------------------------------------------
 // Show themes

@@ -88,7 +88,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
     $rows = $records->num_rows;
 
     $start = 0;
-    $rows_per_page = 6;
+    $rows_per_page = 4;
     if (isset($_GET['page'])) {
         $page = $_GET['page'] - 1;
         $start = $page * $rows_per_page;
@@ -108,8 +108,8 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
             <table class="table-fixed w-full ">
             <thead class="border">
                 <tr class="border-2">
-                    <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Theme Id</th>
-                    <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Title</th>
+                    <th class="w-1/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Theme Id</th>
+                    <th class="w-5/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Title</th>
                     <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tags</th>
                     <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
                 </tr>
@@ -125,7 +125,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
             <tr>
             <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$themeId</td>
             <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$themeName</td>
-            <td id='tags$themeId' class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>";
+            <td id='tags$themeId' class='flex flex-wrap items-center justify-center px-4 py-2 text-center border-b-2 border-[#A3A3A3] text-xs md:text-base'>";
             $select = "SELECT * FROM tags_themes JOIN tags on tags_themes.tagId = tags.tagId WHERE themeId = ?";
             $stmt = $conn->prepare($select);
             $stmt->bind_param("i", $themeId);

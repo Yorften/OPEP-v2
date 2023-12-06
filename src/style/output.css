@@ -678,6 +678,10 @@ video {
   margin-top: 10vh;
 }
 
+.mb-\[2px\] {
+  margin-bottom: 2px;
+}
+
 .block {
   display: block;
 }
@@ -893,6 +897,14 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-1\/12 {
+  width: 8.333333%;
+}
+
+.w-5\/12 {
+  width: 41.666667%;
 }
 
 .flex-1 {
@@ -1123,6 +1135,14 @@ video {
 
 .border-t-0 {
   border-top-width: 0px;
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
 }
 
 .border-\[\#6da22f\] {
