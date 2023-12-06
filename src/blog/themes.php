@@ -21,7 +21,7 @@ session_start();
             // Put The loop below This Section
             ?>
             <div class=" bg-white shadow-lg shadow-gray-300 m-7 p-4  align-middle w-11/12 rounded-lg">
-                <h3 class="flex justify-between text-white-50">Title <span
+                <h3 class="flex justify-between text-white-50"> <a href="./articles.php">Title</a> <span
                         class=" text-xl cursor-pointer hover:text-green-300 "><i class='bx bx-bookmark w-6'></i></span>
                 </h3>
             </div>
