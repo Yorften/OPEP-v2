@@ -155,24 +155,38 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                         <table class="table-fixed w-full ">
                             <thead class="border">
                                 <tr class="border-2">
-                                    <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tag Id</th>
-                                    <th class="w-3/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Name</th>
-                                    <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
+                                    <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Theme Id</th>
+                                    <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Title</th>
+                                    <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tags</th>
+                                    <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
                                 <?php
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    $themeName = htmlspecialchars($row['themeName']);
                                     $themeId = htmlspecialchars($row['themeId']);
+                                    $themeName = htmlspecialchars($row['themeName']);
 
                                 ?>
                                     <tr>
                                         <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $themeId ?></td>
                                         <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $themeName ?></td>
+                                        <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">
+                                            <?php
+                                            $select = "SELECT * FROM tags_themes JOIN tags on tags_themes.tagId = tags.tagId WHERE themeId = ?";
+                                            $stmt = $conn->prepare($select);
+                                            $stmt->bind_param("i", $themeId);
+                                            $stmt->execute();
+                                            $result2 = $stmt->get_result();
+                                            while ($row2 = mysqli_fetch_assoc($result2)) {
+                                                $tagName = $row2['tagName'];
+                                            ?>
+                                                <span class="p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600"><?= $tagName ?></span>
+                                            <?php } ?>
+                                        </td>
                                         <td class="px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">
-                                            <button id="showdetails" onclick="showTagDetails('<?php echo $themeName; ?>',<?= $themeId ?>)" class="px-2 rounded-md bg-amber-500"> Modify </button>
-                                            <button onclick="deleteTag(<?= $themeId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
+                                            <button id="showdetails" onclick="showThemeDetails('<?php echo $themeName; ?>',<?= $themeId ?>)" class="px-2 rounded-md bg-amber-500"> Modify </button>
+                                            <button onclick="deleteTheme(<?= $themeId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
                                         </td>
                                     </tr>
 

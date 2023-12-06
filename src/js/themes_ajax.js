@@ -23,15 +23,37 @@ addbtn.addEventListener("click", (event) => {
       checkedValues.push(themeTags.value);
     }
   });
+  var input_form = document.getElementById("input_form");
+  var error = document.getElementById("addErr");
+  var regex = /^[a-zA-Z ]+$/;
 
-  console.log(themeName);
-  console.log(checkedValues);
+  if (themeName === null || themeName === "") {
+    error.parentElement.classList.remove("bg-green-500");
+    error.parentElement.classList.add("bg-red-500");
+    error.innerHTML = "Please write the theme's title";
+    return 0;
+  } else if (regex.test(themeName) === false) {
+    error.parentElement.classList.remove("bg-green-500");
+    error.parentElement.classList.add("bg-red-500");
+    error.innerHTML = "Please type a valid theme title (phrase)";
+    console.log("error");
+    return 0;
+  }
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http:../blogpages/crudThemes.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
-      console.log(xhr.response);
+      if (xhr.response) {
+        error.parentElement.classList.remove("bg-red-500");
+        error.parentElement.classList.toggle("bg-green-500");
+        error.innerHTML = "Theme added successfully";
+        console.log(xhr.response);
+      } else {
+        error.parentElement.classList.remove("bg-green-500");
+        error.parentElement.classList.add("bg-red-500");
+        error.innerHTML = "Theme already exists";
+      }
     } else {
       console.log("Error while sending request");
     }
@@ -48,10 +70,14 @@ addbtn.addEventListener("click", (event) => {
 
 // --------------------------------------------
 // Delete Tag
-
+function deleteTheme(){
+  
+}
 // --------------------------------------------
 // Edit Tag
-
+function showThemeDetails(tag, id){
+  
+}
 // --------------------------------------------
 // Show tags
 

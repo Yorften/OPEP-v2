@@ -42,7 +42,6 @@ const addTag = (event) => {
         error.innerHTML = "Tag added successfully";
         getTags();
       } else {
-        console.log("name already exists");
         error.parentElement.classList.remove("bg-green-500");
         error.parentElement.classList.add("bg-red-500");
         error.innerHTML = "Tag already exists";

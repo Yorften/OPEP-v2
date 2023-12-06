@@ -15,25 +15,32 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
         foreach($themeTagsId as $tag){
             echo $tag ."\n";
         }
+
+        // Check if the tagName already exists
+        $checkQuery = "SELECT COUNT(*) as count FROM themes WHERE themeName = ?";
+        $checkStmt = $conn->prepare($checkQuery);
+        $checkStmt->bind_param("s", $themeName);
+        $checkStmt->execute();
+        $checkResult = $checkStmt->get_result();
+        $tagCount = $checkResult->fetch_assoc()['count'];
     
-        // // Check if the tagName already exists
-        // $checkQuery = "SELECT COUNT(*) as count FROM tags WHERE tagName = ?";
-        // $checkStmt = $conn->prepare($checkQuery);
-        // $checkStmt->bind_param("s", $tagName);
-        // $checkStmt->execute();
-        // $checkResult = $checkStmt->get_result();
-        // $tagCount = $checkResult->fetch_assoc()['count'];
-    
-        // if ($tagCount > 0) {
-        //     echo "Tag already exists!";
-        // } else {
-        //     $insert = "INSERT INTO tags (tagName) VALUES (?)";
-        //     $stmt = $conn->prepare($insert);
-        //     $stmt->bind_param("s", $tagName);
-        //     $stmt->execute();
-        //     $stmt->close();
-        //     echo "Tag inserted successfully!";
-        // }
+        if ($tagCount > 0) {
+            return false;
+        } else {
+            $insert = "INSERT INTO themes (themeName) VALUES (?)";
+            $stmt = $conn->prepare($insert);
+            $stmt->bind_param("s", $themeName);
+            $stmt->execute();
+            $themeId = $stmt->insert_id;
+            foreach($themeTagsId as $tag){
+                $insert = "INSERT INTO tags_themes (themeId,tagId) VALUES (?,?)";
+                $stmt = $conn->prepare($insert);
+                $stmt->bind_param("ii", $themeId, $tag);
+                $stmt->execute();
+            }
+            $stmt->close();
+            echo "Tag inserted successfully!";
+        }
         exit;
     }
 
@@ -82,25 +89,25 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
     }
 
  
-        $records = $conn->query("SELECT * FROM tags");
-        $rows = $records->num_rows;
-    
-        $start = 0;
-        $rows_per_page = 8;
-        if (isset($_GET['page'])) {
-            $page = $_GET['page'] - 1;
-            $start = $page * $rows_per_page;
-        }
-        $select = "SELECT * FROM tags LIMIT ?,?";
-        $stmt = $conn->prepare($select);
-        $stmt->bind_param("ii", $start, $rows_per_page);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $pages = ceil($rows / $rows_per_page);
-    
-    
-    
-        if ($rows > 0) {
+    $records = $conn->query("SELECT * FROM themes");
+    $rows = $records->num_rows;
+
+    $start = 0;
+    $rows_per_page = 8;
+    if (isset($_GET['page'])) {
+        $page = $_GET['page'] - 1;
+        $start = $page * $rows_per_page;
+    }
+    $select = "SELECT * FROM themes LIMIT ?,?";
+    $stmt = $conn->prepare($select);
+    $stmt->bind_param("ii", $start, $rows_per_page);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $pages = ceil($rows / $rows_per_page);
+
+
+
+    if ($rows > 0) {
     
             echo ' 
                            <table class="table-fixed w-full ">
