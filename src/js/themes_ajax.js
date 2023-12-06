@@ -1,12 +1,35 @@
 window.onclick = function (event) {
   var popup = document.getElementById("popup");
-  var popup2 = document.getElementById("popupEdit");
   if (event.target == popup) {
     popup.classList.add("hidden");
-  } else if (event.target == popup2) {
-    popup2.classList.add("hidden");
   }
 };
+
+window.onclick = function (event) {
+  var popup2 = document.getElementById("popupEditTag");
+  if (event.target == popup2) {
+    popup2.classList.add("hidden");
+    const checkboxes = document.querySelectorAll(
+      'input[type="checkbox"].uncheck'
+    );
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+  }
+};
+
+function closePopupEdit() {
+  document.getElementById("popupEditTag").classList.add("hidden");
+  const checkboxes = document.querySelectorAll(
+    'input[type="checkbox"].uncheck'
+  );
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+}
+
 // --------------------------------------------
 // Add theme
 
@@ -90,7 +113,7 @@ function deleteTheme(themeId) {
 // --------------------------------------------
 // Edit theme
 function showThemeDetails(name, id) {
-  document.getElementById("popupEdit").classList.remove("hidden");
+  document.getElementById("popupEditTag").classList.remove("hidden");
   let themeName = document.getElementById("themeName2");
   let themeId = document.getElementById("themeId");
   var themeTags = document.getElementById("tags" + id);
@@ -98,8 +121,9 @@ function showThemeDetails(name, id) {
   var currentTags = [];
   var themeTags2 = document.querySelectorAll(".taglist");
   const allTags = [];
+
   for (var i = 0; i < spans.length; i++) {
-    currentTags[i] = spans[i].getAttribute('value');
+    currentTags[i] = spans[i].getAttribute("value");
   }
 
   themeTags2.forEach((themeTags2) => {
@@ -108,17 +132,72 @@ function showThemeDetails(name, id) {
     }
   });
 
-  console.log(allTags);
-  for(var i = 0 ; i < currentTags.length ; i++){
-    for(var j = 0 ; i < allTags.length; j++){
-      if(currentTags[i] = allTags[j]){
-        document.getElementById('tagedit'+i);
+  for (var i = 0; i < currentTags.length; i++) {
+    for (var j = allTags.length - 1; j >= 0; j--) {
+      if (currentTags[i] === allTags[j]) {
+        document.getElementById("tagedit" + j).checked = true;
+        break;
+      } else {
+        document.getElementById("tagedit" + j).checked = false;
       }
     }
   }
   themeName.value = name;
   themeId.value = id;
 }
+
+document.getElementById("modifyTheme").addEventListener("click", (event) => {
+  event.preventDefault();
+  var themeName = document.getElementById("themeName2").value;
+  var themeId = document.getElementById("themeId").value;
+  var modify_form = document.getElementById("modify_form");
+  var error = document.getElementById("modErr");
+  var themeTags = document.querySelectorAll(".uncheck");
+  const checkedValues2 = [];
+
+  themeTags.forEach((themeTags) => {
+    if (themeTags.checked) {
+      checkedValues2.push(themeTags.value);
+    }
+  });
+
+  var regex = /^[a-zA-Z ]+$/;
+
+  if (themeName === null || themeName === "") {
+    error.parentElement.classList.remove("bg-green-500");
+    error.parentElement.classList.add("bg-red-500");
+    error.innerHTML = "New value can't be empty";
+    return 0;
+  } else if (regex.test(themeName) === false) {
+    error.parentElement.classList.remove("bg-green-500");
+    error.parentElement.classList.add("bg-red-500");
+    error.innerHTML = "Please type a valid theme title (phrase)";
+    return 0;
+  }
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http:../blogpages/crudThemes.php", true);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      error.parentElement.classList.remove("bg-red-500");
+      error.parentElement.classList.toggle("bg-green-500");
+      error.innerHTML = "Theme updated successfully";
+      console.log(xhr.response);
+      getThemes();
+    } else {
+      console.log("Error while sending request");
+    }
+  };
+  var theme = {
+    themeName2: themeName,
+    themeId2: themeId,
+    checkedValues2: checkedValues2,
+  };
+  console.log(theme);
+  const data = JSON.stringify(theme);
+  xhr.send(data);
+  modify_form.reset();
+});
 // --------------------------------------------
 // Show themes
 

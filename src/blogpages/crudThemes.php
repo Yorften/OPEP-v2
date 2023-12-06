@@ -11,10 +11,6 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
     if (!empty($data['themeName'])) {
         $themeName = $data['themeName'];
         $themeTagsId = $data['checkedValues'];
-        echo $themeName . "\n";
-        foreach ($themeTagsId as $tag) {
-            echo $tag . "\n";
-        }
 
         // Check if the theme name already exists
         $checkQuery = "SELECT COUNT(*) as count FROM themes WHERE themeName = ?";
@@ -106,10 +102,11 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
             $stmt = $conn->prepare($select);
             $stmt->bind_param("i", $themeId);
             $stmt->execute();
-            $result2 = $stmt->get_result();
-            while ($row2 = mysqli_fetch_assoc($result2)) {
-                $tagName = $row2['tagName'];
-                echo "<span class='p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600 mr-2'>$tagName</span>";
+            $result3 = $stmt->get_result();
+            while ($row3 = mysqli_fetch_assoc($result3)) {
+                $tagName = $row3['tagName'];
+                $tagId = $row3['tagId'];
+                echo "<span class='p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600 mr-2' value='$tagId'>$tagName</span>";
             }
             echo "
             </td>

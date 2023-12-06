@@ -44,9 +44,9 @@ if (!isset($_SESSION['administrator_name'])) {
                 <hr class="border-black w-full">
                 <div class="flex flex-col">
                     <p class=" font-semibold">BLOG</p>
-                    <a href="../blogpages/tags.php" target="contentFrame">Tags</a>
-                    <a href="../blogpages/themes.php" target="contentFrame">Themes</a>
-                    <a href="../blogpages/articles.php" target="contentFrame">Articles</a>
+                    <a href="../blogpages/manageTags.php" target="contentFrame">Tags</a>
+                    <a href="../blogpages/manageThemes.php" target="contentFrame">Themes</a>
+                    <a href="../blogpages/manageArticles.php" target="contentFrame">Articles</a>
                 </div>
             </div>
         </div>

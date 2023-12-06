@@ -69,11 +69,11 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
         </div>
         <!-- End of Popup -->
         <!-- Popup Structure Edit ver. -->
-        <div id="popupEdit" class="fixed w-full h-full top-0 left-0  items-center flex justify-center hidden z-50">
+        <div id="popupEditTag" class="fixed w-full h-full top-0 left-0  items-center flex justify-center hidden z-50">
             <div class="bg-white w-7/12 h-fit border-2 border-amber-600 flex flex-col justify-start items-center overflow-y-auto rounded-2xl md:h-fit">
                 <div class="bg-amber-600 w-7/12 h-8 fixed rounded-tr-2xl rounded-tl-2xl">
                     <div class="flex justify-end">
-                        <span onclick="closePopup()" class="text-2xl font-bold cursor-pointer mr-3">&times;</span>
+                        <span onclick="closePopupEdit()" class="text-2xl font-bold cursor-pointer mr-3">&times;</span>
                     </div>
                 </div>
                 <form id="modify_form" class="flex flex-col justify-between items-center h-full mt-[10vh] w-full">
@@ -100,7 +100,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
 
                             ?>
                                     <div class="mb-4">
-                                        <input type="checkbox" id="tagedit<?= $i ?>" class="peer hidden" value="<?= $tagId ?>">
+                                        <input type="checkbox" id="tagedit<?= $i ?>" class="peer hidden uncheck" value="<?= $tagId ?>">
                                         <label for="tagedit<?= $i ?>" class="w-full p-1 border-2 rounded-xl select-none cursor-pointer peer-checked:border-amber-600 peer-checked:text-amber-600">
                                             <?= $tagName ?>
                                         </label>
