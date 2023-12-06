@@ -3,7 +3,6 @@
 
 <head>
     <?php include("../includes/head.html"); ?>
-    <title>Document</title>
 </head>
 
 <body>
@@ -26,9 +25,7 @@
         <aside class="flex justify-end w-full p-6 rounded-lg ">
             <nav class="w-96 flex justify-center">
                 <div class=" bg-white shadow-lg shadow-gray-300 m-7 p-4  align-middle w-11/12 rounded-lg">
-                    <h3 class="flex justify-between text-white-50"> <a href="./articles.php">Title</a> <span
-                            class=" text-xl cursor-pointer hover:text-green-300 "><i
-                                class='bx bx-bookmark w-6'></i></span>
+                    <h3 class="flex justify-between text-white-50"> <a href="./articles.php">Title</a> <span class=" text-xl cursor-pointer hover:text-green-300 "><i class='bx bx-bookmark w-6'></i></span>
                     </h3>
                 </div>
             </nav>
@@ -37,11 +34,9 @@
 
     <div class="flex w-full bg-white">
         <div class="py-10">
-            <textarea placeholder="Add your comment..."
-                class="p-2 focus:outline-1 focus:outline-blue-500 font-bold border-[0.1px] resize-none h-[120px] border-[#9EA5B1] rounded-md w-[60vw]"></textarea>
+            <textarea placeholder="Add your comment..." class="p-2 focus:outline-1 focus:outline-blue-500 font-bold border-[0.1px] resize-none h-[120px] border-[#9EA5B1] rounded-md w-[60vw]"></textarea>
             <div class="flex justify-end">
-                <button
-                    class="text-sm font-semibold absolute bg-[#4F46E5] w-fit text-white py-2 rounded px-3">Post</button>
+                <button class="text-sm font-semibold absolute bg-[#4F46E5] w-fit text-white py-2 rounded px-3">Post</button>
             </div>
         </div>
     </div>

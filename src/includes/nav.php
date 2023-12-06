@@ -67,7 +67,7 @@
                  </a>
              </li>
              <li>
-                 <a href="../blogpages/blog.php">
+                 <a href="../blog/themes.php">
                      <span>BLOG</span>
                  </a>
              </li>
@@ -245,8 +245,8 @@
                  </a>
              </div>
              <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
-                 <a href="../blogpages/blog.php">
-                     <span>ABOUT US</span>
+                 <a href="../blog/themes.php">
+                     <span>BLOG</span>
                  </a>
              </div>
          <?php endif  ?>
