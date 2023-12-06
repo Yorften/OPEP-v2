@@ -53,6 +53,34 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
 
     //********************** Update theme **************************//
 
+    if (!empty($data['themeName2'])) {
+        $themeId = $data['themeId2'];
+        $themeName = $data['themeName2'];
+        $themeTagsId = $data['checkedValues2'];
+
+        $update = "UPDATE themes SET themeName = ? WHERE themeId = ?";
+        $stmt = $conn->prepare($update);
+        $stmt->bind_param("si", $themeName, $themeId);
+        $stmt->execute();
+        $stmt->close();
+        // delete all tags of theme to re-ensert new ones
+        $delete = "DELETE FROM tags_themes WHERE themeId = ?";
+        $stmt = $conn->prepare($delete);
+        $stmt->bind_param("i", $themeId);
+        $stmt->execute();
+        $stmt->close();
+        // insert new tags if not same tags again
+        foreach ($themeTagsId as $tag) {
+            $insert = "INSERT INTO tags_themes (themeId,tagId) VALUES (?,?)";
+            $stmt = $conn->prepare($insert);
+            $stmt->bind_param("ii", $themeId, $tag);
+            $stmt->execute();
+        }
+        $stmt->close();
+        echo "Tag inserted successfully!";
+        exit;
+    }
+
 
 
 

@@ -193,7 +193,7 @@ document.getElementById("modifyTheme").addEventListener("click", (event) => {
     themeId2: themeId,
     checkedValues2: checkedValues2,
   };
-  console.log(theme);
+  console.log(theme); 
   const data = JSON.stringify(theme);
   xhr.send(data);
   modify_form.reset();
