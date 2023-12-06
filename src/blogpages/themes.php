@@ -37,14 +37,14 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                             $select = "SELECT * FROM tags";
                             $result = mysqli_query($conn, $select);
                             if (mysqli_num_rows($result) > 0) {
-                                $i = 1;
+                                $i = 0;
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $tagId = $row['tagId'];
                                     $tagName = $row['tagName'];
 
                             ?>
                                     <div class="mb-4">
-                                        <input type="checkbox" id="tag<?= $i ?>" class="peer hidden" value="<?= $tagId ?>">
+                                        <input type="checkbox" id="tag<?= $i ?>" class="peer hidden taglist" value="<?= $tagId ?>">
                                         <label for="tag<?= $i ?>" class="w-full p-1 border-2 rounded-xl select-none cursor-pointer peer-checked:border-amber-600 peer-checked:text-amber-600">
                                             <?= $tagName ?>
                                         </label>
@@ -52,6 +52,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                 <?php
                                     $i++;
                                 }
+                                $i=0;
                             } else {
                                 ?>
                                 <option value="">No category exists</option>
@@ -59,7 +60,6 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                             }
                             ?>
                         </div>
-
                     </div>
                     <div class="flex justify-end mb-4">
                         <input required type="submit" id="addTheme" class="cursor-pointer px-8 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]" value="Add theme">
@@ -76,45 +76,51 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                         <span onclick="closePopup()" class="text-2xl font-bold cursor-pointer mr-3">&times;</span>
                     </div>
                 </div>
-                <form id="modify_form" class="flex flex-col justify-between items-center h-full mt-[10vh]">
+                <form id="modify_form" class="flex flex-col justify-between items-center h-full mt-[10vh] w-full">
                     <div class="bg-red-500 mb-3 px-2 rounded-lg">
                         <p id="modErr" class="text-white text-lg text-center"></p>
                     </div>
-                    <div class="flex flex-col mb-3">
+                    <div class="flex flex-col mb-3 w-[80%]">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
                             <p class="text-xs">Theme name</p>
                             <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="themeName2" type="text" name="themeName2" placeholder="Name" autocomplete="off" value="">
                         </div>
                     </div>
                     <div class="flex flex-col mb-3 w-full">
-                        <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md md:h-[63.9px]">
-                            <p class="text-xs">Theme's tag</p>
-                            <select required class="block leading-5 text-gray-700 bg-white border-transparent rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300" name="category" autocomplete="off" id="currentTags" multiple>
-                                <option value="" hidden disabled selected>Select...</option>
+                        <p class="text-md font-medium text-center mb-4">Theme's tags</p>
+                        <div class="flex w-full justify-evenly flex-wrap">
+                            <?php
+                            $select = "SELECT * FROM tags";
+                            $result = mysqli_query($conn, $select);
+                            if (mysqli_num_rows($result) > 0) {
+                                $i = 0;
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $tagId = $row['tagId'];
+                                    $tagName = $row['tagName'];
+
+                            ?>
+                                    <div class="mb-4">
+                                        <input type="checkbox" id="tagedit<?= $i ?>" class="peer hidden" value="<?= $tagId ?>">
+                                        <label for="tagedit<?= $i ?>" class="w-full p-1 border-2 rounded-xl select-none cursor-pointer peer-checked:border-amber-600 peer-checked:text-amber-600">
+                                            <?= $tagName ?>
+                                        </label>
+                                    </div>
                                 <?php
-                                $select = "SELECT * FROM tags";
-                                $result = mysqli_query($conn, $select);
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        $tagId = $row['tagId'];
-                                        $tagName = $row['tagName'];
-                                ?>
-                                        <option value="<?php echo $tagName ?>"><?php echo $tagName ?></option>
-                                    <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <option value="">No category exists</option>
-                                <?php
+                                    $i++;
                                 }
+                                $i=0;
+                            } else {
                                 ?>
-                            </select>
+                                <option value="">No category exists</option>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="flex flex-col mb-3 hidden">
                         <div class="flex flex-col border-2 border-[#A1A1A1] p-2 rounded-md">
                             <p class="text-xs">theme id</p>
-                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="themeId2" type="text" name="themeId2" placeholder="Name" autocomplete="off" value="">
+                            <input required class="placeholder:font-light placeholder:text-xs focus:outline-none" id="themeId" type="text" name="themeId" placeholder="Name" autocomplete="off" value="">
                         </div>
                     </div>
                     <div class="flex justify-end mb-4">
@@ -130,7 +136,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                 <button onclick="openPopup()" class="p-2 pb-1 bg-green-700 mb-2 rounded-md">Add Theme +</button>
             </div>
             <div class="border-2 border-gray-300 rounded-xl h-[90vh] w-full flex">
-                <div id="tags" class="flex flex-col justify-between w-full p-4">
+                <div id="themes" class="flex flex-col justify-between w-full p-4">
                     <?php
                     $records = $conn->query("SELECT * FROM themes");
                     $rows = $records->num_rows;
@@ -171,7 +177,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                     <tr>
                                         <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $themeId ?></td>
                                         <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $themeName ?></td>
-                                        <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">
+                                        <td id="tags<?= $themeId ?>" class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">
                                             <?php
                                             $select = "SELECT * FROM tags_themes JOIN tags on tags_themes.tagId = tags.tagId WHERE themeId = ?";
                                             $stmt = $conn->prepare($select);
@@ -180,8 +186,9 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                             $result2 = $stmt->get_result();
                                             while ($row2 = mysqli_fetch_assoc($result2)) {
                                                 $tagName = $row2['tagName'];
+                                                $tagId = $row2['tagId'];
                                             ?>
-                                                <span class="p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600"><?= $tagName ?></span>
+                                                <span class="p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600 mr-[2px]" value="<?= $tagId ?>"><?= $tagName ?></span>
                                             <?php } ?>
                                         </td>
                                         <td class="px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">

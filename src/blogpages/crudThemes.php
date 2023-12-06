@@ -6,24 +6,24 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
 
     $data = json_decode(file_get_contents("php://input"), true);
 
-    //********************** Add tag **************************// 
+    //********************** Add theme **************************// 
 
     if (!empty($data['themeName'])) {
         $themeName = $data['themeName'];
         $themeTagsId = $data['checkedValues'];
-        echo $themeName ."\n";
-        foreach($themeTagsId as $tag){
-            echo $tag ."\n";
+        echo $themeName . "\n";
+        foreach ($themeTagsId as $tag) {
+            echo $tag . "\n";
         }
 
-        // Check if the tagName already exists
+        // Check if the theme name already exists
         $checkQuery = "SELECT COUNT(*) as count FROM themes WHERE themeName = ?";
         $checkStmt = $conn->prepare($checkQuery);
         $checkStmt->bind_param("s", $themeName);
         $checkStmt->execute();
         $checkResult = $checkStmt->get_result();
         $tagCount = $checkResult->fetch_assoc()['count'];
-    
+
         if ($tagCount > 0) {
             return false;
         } else {
@@ -32,7 +32,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
             $stmt->bind_param("s", $themeName);
             $stmt->execute();
             $themeId = $stmt->insert_id;
-            foreach($themeTagsId as $tag){
+            foreach ($themeTagsId as $tag) {
                 $insert = "INSERT INTO tags_themes (themeId,tagId) VALUES (?,?)";
                 $stmt = $conn->prepare($insert);
                 $stmt->bind_param("ii", $themeId, $tag);
@@ -44,56 +44,27 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
         exit;
     }
 
-    //********************** Delete tag **************************// 
+    //********************** Delete theme **************************// 
 
-    if (!empty($data['tagId'])) {
-        $tagId =  $data['tagId'];
-
-        $delete = "DELETE FROM tags WHERE tagId = ?";
+    if (!empty($data['themeId'])) {
+        $themeId =  $data['themeId'];
+        $delete = "DELETE FROM themes WHERE themeId = ?";
         $stmt = $conn->prepare($delete);
-        $stmt->bind_param("i", $tagId);
+        $stmt->bind_param("i", $themeId);
         $stmt->execute();
-        $stmt->close();
-
         $stmt->close();
     }
 
-    //********************** Update tag **************************//
+    //********************** Update theme **************************//
 
-    if (!empty($data['tagId2'])) {
-        $tagId =  $data['tagId2'];
 
-        $select = "SELECT * FROM tags WHERE tagId = ?";
-        $stmt = $conn->prepare($select);
-        $stmt->bind_param("i", $tagId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $data = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = $row;
-        }
-        echo json_encode($data);
-        exit;
-    }
 
-    if (!empty($data['tagName2'])) {
-        $tagId = $data['tagId3'];
-        $tagName = $data['tagName2'];
 
-        $update = "UPDATE tags SET tagName = ? WHERE tagId = ?";
-        $stmt = $conn->prepare($update);
-        $stmt->bind_param("si", $tagName, $tagId);
-        $stmt->execute();
-        $stmt->close();
-        exit;
-    }
-
- 
     $records = $conn->query("SELECT * FROM themes");
     $rows = $records->num_rows;
 
     $start = 0;
-    $rows_per_page = 8;
+    $rows_per_page = 6;
     if (isset($_GET['page'])) {
         $page = $_GET['page'] - 1;
         $start = $page * $rows_per_page;
@@ -108,92 +79,105 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
 
 
     if ($rows > 0) {
-    
-            echo ' 
-                           <table class="table-fixed w-full ">
-                                <thead class="border">
-                                    <tr class="border-2">
-                                        <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tag Id</th>
-                                        <th class="w-3/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Name</th>
-                                        <th class="w-1/5 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody">';
-    
-            while ($row = mysqli_fetch_assoc($result)) {
-                $name = htmlspecialchars($row['tagName']);
-                $id = htmlspecialchars($row['tagId']);
-    
-    
-                echo "
-                            <tr>
-                                <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$id</td>
-                                <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$name</td>
-                                <td class='px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>
-                                    <button onclick=\"showTagDetails('$name',$id)\" class='px-2 rounded-md bg-amber-500'> Modify </button>
-                                    <button onclick='deleteTag($id)' class='px-2 rounded-md bg-red-500'> Delete </button>
-                                </td>
-                            </tr>";
+
+        echo ' 
+            <table class="table-fixed w-full ">
+            <thead class="border">
+                <tr class="border-2">
+                    <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Theme Id</th>
+                    <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Title</th>
+                    <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tags</th>
+                    <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">';
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $themeId = htmlspecialchars($row['themeId']);
+            $themeName = htmlspecialchars($row['themeName']);
+
+
+            echo "
+            <tr>
+            <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$themeId</td>
+            <td class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>$themeName</td>
+            <td id='tags$themeId' class='px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>";
+            $select = "SELECT * FROM tags_themes JOIN tags on tags_themes.tagId = tags.tagId WHERE themeId = ?";
+            $stmt = $conn->prepare($select);
+            $stmt->bind_param("i", $themeId);
+            $stmt->execute();
+            $result2 = $stmt->get_result();
+            while ($row2 = mysqli_fetch_assoc($result2)) {
+                $tagName = $row2['tagName'];
+                echo "<span class='p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600 mr-2'>$tagName</span>";
             }
-        } else {
-    
-    
-            echo '
-           <div class="w-full h-[100vh] flex items-center justify-center">
-                <p>No tags in database</p>
-            </div>';
+            echo "
+            </td>
+            <td class='px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base'>
+                <button id='showdetails' onclick=\"showThemeDetails('$themeName',$themeId)\" class='px-2 rounded-md bg-amber-500'> Modify </button>
+                <button onclick='deleteTheme($themeId)' class='px-2 rounded-md bg-red-500'> Delete </button>
+            </td>
+        </tr>
+            ";
         }
-        echo
-        '</tbody>
-        </table>';
-    
-    
-    
-    
+    } else {
+
+
         echo '
+           <div class="w-full h-[100vh] flex items-center justify-center">
+                <p>No themes in database</p>
+            </div>';
+    }
+    echo
+    '</tbody>
+        </table>';
+
+
+
+
+    echo '
         <div>
             <div class="pl-6">';
-    
-        if (!isset($_GET['page'])) {
-            $page = 1;
-        } else {
-            $page = $_GET['page'];
-        }
-    
-        echo "Showing " . $page . "of " . $pages . "
+
+    if (!isset($_GET['page'])) {
+        $page = 1;
+    } else {
+        $page = $_GET['page'];
+    }
+
+    echo "Showing " . $page . "of " . $pages . "
             </div>
             <div class='flex flex-row justify-center items-center gap-3'>
     
                 <a href='?page=1'>First</a>";
-        if (isset($_GET['page']) && $_GET['page'] > 1) {
-    
-            echo '<a href="?page=' . ($page - 1) . '">Previous</a>';
-        } else {
-            echo '<a class="cursor-pointer">Previous</a>';
-        }
-    
-    
-        for ($i = 1; $i <= $pages; $i++) {
-    
-            echo '<a href="?page=' . $i . '" class="">' . $i . '</a>';
-        }
-    
-        if (!isset($_GET['page'])) {
-            if ($pages == 1) {
-    
-                echo '<a class="cursor-pointer">Next</a>';
-            } else {
-                echo '<a href="?page=2">Next</a>';
-            }
-        } elseif ($_GET['page'] >= $pages) {
+    if (isset($_GET['page']) && $_GET['page'] > 1) {
+
+        echo '<a href="?page=' . ($page - 1) . '">Previous</a>';
+    } else {
+        echo '<a class="cursor-pointer">Previous</a>';
+    }
+
+
+    for ($i = 1; $i <= $pages; $i++) {
+
+        echo '<a href="?page=' . $i . '" class="">' . $i . '</a>';
+    }
+
+    if (!isset($_GET['page'])) {
+        if ($pages == 1) {
+
             echo '<a class="cursor-pointer">Next</a>';
         } else {
-            echo '<a href="?page=' . ($page + 1) . '">Next</a>';
+            echo '<a href="?page=2">Next</a>';
         }
-    
-        echo '
+    } elseif ($_GET['page'] >= $pages) {
+        echo '<a class="cursor-pointer">Next</a>';
+    } else {
+        echo '<a href="?page=' . ($page + 1) . '">Next</a>';
+    }
+
+    echo '
         <a href="?page=' . $pages . '">Last</a>
         </div>
     </div>';
-
 } else echo "You don't have permission";

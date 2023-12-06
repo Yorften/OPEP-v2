@@ -8,14 +8,14 @@ window.onclick = function (event) {
   }
 };
 // --------------------------------------------
-// Add Tag
+// Add theme
 
 const addbtn = document.getElementById("addTheme");
 addbtn.addEventListener("click", (event) => {
   event.preventDefault();
   var input_form = document.getElementById("input_form");
   var themeName = document.getElementById("themeName").value;
-  var themeTags = document.querySelectorAll(".peer");
+  var themeTags = document.querySelectorAll(".taglist");
   const checkedValues = [];
 
   themeTags.forEach((themeTags) => {
@@ -23,6 +23,7 @@ addbtn.addEventListener("click", (event) => {
       checkedValues.push(themeTags.value);
     }
   });
+  // console.log(checkedValues);
   var input_form = document.getElementById("input_form");
   var error = document.getElementById("addErr");
   var regex = /^[a-zA-Z ]+$/;
@@ -48,6 +49,7 @@ addbtn.addEventListener("click", (event) => {
         error.parentElement.classList.remove("bg-red-500");
         error.parentElement.classList.toggle("bg-green-500");
         error.innerHTML = "Theme added successfully";
+        getThemes();
         console.log(xhr.response);
       } else {
         error.parentElement.classList.remove("bg-green-500");
@@ -69,32 +71,70 @@ addbtn.addEventListener("click", (event) => {
 });
 
 // --------------------------------------------
-// Delete Tag
-function deleteTheme(){
-  
+// Delete theme
+function deleteTheme(themeId) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "../blogpages/crudThemes.php", true);
+  const data = JSON.stringify({ themeId: themeId });
+  xhr.send(data);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      console.log(themeId);
+      console.log(xhr.responseText);
+      getThemes();
+    } else {
+      console.log("Error while sending request");
+    }
+  };
 }
 // --------------------------------------------
-// Edit Tag
-function showThemeDetails(tag, id){
-  
-}
-// --------------------------------------------
-// Show tags
+// Edit theme
+function showThemeDetails(name, id) {
+  document.getElementById("popupEdit").classList.remove("hidden");
+  let themeName = document.getElementById("themeName2");
+  let themeId = document.getElementById("themeId");
+  var themeTags = document.getElementById("tags" + id);
+  var spans = themeTags.getElementsByTagName("span");
+  var currentTags = [];
+  var themeTags2 = document.querySelectorAll(".taglist");
+  const allTags = [];
+  for (var i = 0; i < spans.length; i++) {
+    currentTags[i] = spans[i].getAttribute('value');
+  }
 
-// function getThemes() {
-//   const tags = document.getElementById("tags");
-//   var xhr = new XMLHttpRequest();
-//   xhr.open("GET", "../blogpages/crudThemes.php", true);
-//   xhr.onload = () => {
-//     if (xhr.status === 200) {
-//       let data = xhr.response;
-//       console.log(data);
-//       tags.innerHTML = data;
-//     } else {
-//       console.log("Error while sending request");
-//     }
-//   };
-//   xhr.send();
-// }
+  themeTags2.forEach((themeTags2) => {
+    if (themeTags2) {
+      allTags.push(themeTags2.value);
+    }
+  });
+
+  console.log(allTags);
+  for(var i = 0 ; i < currentTags.length ; i++){
+    for(var j = 0 ; i < allTags.length; j++){
+      if(currentTags[i] = allTags[j]){
+        document.getElementById('tagedit'+i);
+      }
+    }
+  }
+  themeName.value = name;
+  themeId.value = id;
+}
+// --------------------------------------------
+// Show themes
+
+function getThemes() {
+  const themes = document.getElementById("themes");
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "../blogpages/crudThemes.php", true);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      let data = xhr.response;
+      themes.innerHTML = data;
+    } else {
+      console.log("Error while sending request");
+    }
+  };
+  xhr.send();
+}
 
 // --------------------------------------------
