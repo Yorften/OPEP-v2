@@ -69,8 +69,8 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
         }
         exit;
     }
-
-
+?>
+<?php
     $records = $conn->query("SELECT * FROM tags");
     $rows = $records->num_rows;
 

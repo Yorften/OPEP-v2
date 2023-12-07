@@ -39,31 +39,47 @@ if (isset($_GET['article'])) {
             <p class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
         </div>
         <div class="w-full shadow-xl rounded-xl border">
-            <p class="p-4">
+            <p class="p-8">
                 <?= $articleContent ?>
             </p>
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col mt-6">
             <h1 class="text-xl font-medium pl-4">Comments</h1>
         </div>
         <div class="flex flex-col gap-4 w-4/5">
             <textarea name="comment" id="comment" cols="30" rows="5" class="w-full resize-none shadow-xl border-t-2 rounded-xl p-4" placeholder="Leave a comment!"></textarea>
             <div class="self-end">
-            <button class="px-8 py-2 bg-gray-400 text-white font-semibold rounded-lg ">Comment</button>
+                <input type="text">
+                <button id="addComment" class="px-8 py-2 bg-gray-400 text-white font-semibold rounded-lg ">Comment</button>
+            </div>
         </div>
-        </div>
-        <div class="w-full">
+        <div id="comment" class="w-4/5 mt-6">
             <?php
             $select = "SELECT * FROM comments WHERE articleId = $articleId";
-            $result = mysqli_query($conn,$select);
-            while($row=mysqli_fetch_assoc($result))
+            $result = mysqli_query($conn, $select);
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $userSession = $row['userSession'];
+                    $commentContent = $row['commentContent'];
+                    $user = "SELECT * FROM users WHERE userId = $userSession";
+                    $result2 = mysqli_query($conn, $user);
+                    $row2 = mysqli_fetch_assoc($result2);
+                    $userName = $row2['userName'];
             ?>
-            <div class="flex flex-col w-full shadow-md rounded-lg border-t-2">
-
-            </div>
+                    <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4">
+                        <h1 class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl rounded-xl border-gray-500'></i><?= $userName ?></h1>
+                        <p><?= $commentContent ?></p>
+                    </div>
+                <?php }
+            } else { ?>
+                <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 text-center">
+                    <p>No comments</p>
+                </div>
+            <?php    } ?>
         </div>
     </div>
     <?php include '../includes/footer_blog.html'; ?>
+    <script src="../js/comments_ajax.js"></script>
 </body>
 
 </html>
