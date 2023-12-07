@@ -15,26 +15,100 @@ session_start();
 <body class=" h-[84vh]">
     <?php include("../includes/nav_blog.php"); ?>
     <h1 class="text-center m-4 text-xl">THE HOUSEPLANT & URBAN JUNGLE BLOG</h1>
-    <div class="container flex justify-center align-middle  h-[84vh]">
-        <div class="h-96 w-11/12">
+    <div class="flex flex-col justify-center items-center">
+        <div class="w-[70%] mx-auto h-[80vh]">
             <?php
-            // Put The loop below This Section
-            ?>
-            <div class=" bg-white shadow-lg shadow-gray-300 m-7 p-4  align-middle w-11/12 rounded-lg">
-                <h3 class="flex justify-between text-white-50"> <a href="./articles.php">Title</a> <span class=" text-xl cursor-pointer hover:text-green-300 "><i class='bx bx-bookmark w-6'></i></span>
-                </h3>
-            </div>
-            <?php
-            // This Tag of Php For End the loop 
-            ?>
-            <div class=" bg-white shadow-lg shadow-gray-300 m-7 p-4  align-middle w-11/12 rounded-lg">
-                <h3 class="flex justify-between text-white-50">Title <span class=" text-xl cursor-pointer hover:text-green-300 "><i class='bx bx-bookmark w-6'></i></span>
-                </h3>
-            </div>
+            $records = $conn->query("SELECT * FROM themes");
+            $rows = $records->num_rows;
 
-            <div class=" bg-white shadow-lg shadow-gray-300 m-7 p-4  align-middle w-11/12 rounded-lg">
-                <h3 class="flex justify-between text-white-50">Title <span class=" text-xl cursor-pointer hover:text-green-300 "><i class='bx bx-bookmark w-6'></i></span>
-                </h3>
+            $start = 0;
+            $rows_per_page = 6;
+            if (isset($_GET['page'])) {
+                $page = $_GET['page'] - 1;
+                $start = $page * $rows_per_page;
+            }
+            $select = "SELECT * FROM themes LIMIT ?,?";
+            $stmt = $conn->prepare($select);
+            $stmt->bind_param("ii", $start, $rows_per_page);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $pages = ceil($rows / $rows_per_page);
+            if ($rows > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $themeId = htmlspecialchars($row['themeId']);
+                    $themeName = htmlspecialchars($row['themeName']);
+                    $sql = "SELECT COUNT(*) AS articles_count 
+                              FROM Articles
+                              JOIN themes ON Articles.themeId = themes.themeId 
+                              WHERE themes.themeName = '$themeName'
+                              GROUP BY themes.themeName;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $result2 = $stmt->get_result();
+                    if (mysqli_num_rows($result2) > 0) {
+                        $row2 = mysqli_fetch_assoc($result2);
+                        $count = $row2['articles_count'];
+                    } else $count = 0;
+            ?>
+                    <div class="w-full bg-white shadow-lg border-t shadow-gray-300 m-4 p-4 items-center rounded-lg">
+                        <h3 class="flex justify-between items-center text-white-50"> <a class="hover:text-green-400 text-xl" href="articles.php?theme=<?= $themeId ?>"><?= $themeName ?></a> <span class=" text-xl cursor-pointer hover:text-green-400 ">
+                                <a href="articles.php?theme=<?= $themeId ?>"><?= $count ?> Articles</a>
+                            </span>
+                        </h3>
+                    </div>
+                <?php } ?>
+
+            <?php } else { ?>
+                <div class="flex items-center justify-center text-2xl h-[60vh]">
+                    <p>No themes found</p>
+                </div>
+            <?php } ?>
+        </div>
+        <div class="w-[70%] mx-auto">
+            <div class="pl-6">
+                <?php
+                if (!isset($_GET['page'])) {
+                    $page = 1;
+                } else {
+                    $page = $_GET['page'];
+                }
+                ?>
+                Showing <?php echo $page ?> of <?php echo $pages ?>
+            </div>
+            <div class="flex flex-row justify-center items-center gap-3">
+
+                <a href="?page=1">First</a>
+                <?php if (isset($_GET['page']) && $_GET['page'] > 1) { ?>
+
+                    <a href="?page=<?php echo $_GET['page'] - 1 ?>">Previous</a>
+
+                <?php } else { ?>
+                    <a class="cursor-pointer">Previous</a>
+                <?php } ?>
+
+                <?php
+                for ($i = 1; $i <= $pages; $i++) {
+                ?>
+                    <a href="?page=<?php echo $i ?>" class=""><?php echo $i ?></a>
+                <?php
+                }
+                ?>
+                <?php
+                if (!isset($_GET['page'])) {
+                    if ($pages == 1) {
+                ?>
+                        <a class="cursor-pointer">Next</a>
+                    <?php } else { ?>
+                        <a href="?page=2">Next</a>
+                    <?php } ?>
+
+                <?php } elseif ($_GET['page'] >= $pages) { ?>
+                    <a class="cursor-pointer">Next</a>
+                <?php } else { ?>
+                    <a href="?page=<?php echo $_GET['page'] + 1 ?>">Next</a>
+                <?php }
+                ?>
+                <a href="?page=<?php echo $pages ?>">Last</a>
             </div>
         </div>
     </div>

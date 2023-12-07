@@ -49,12 +49,14 @@ if (isset($_POST['submit'])) {
 
                         $_SESSION['client_cart'] = $cartId;
                         $_SESSION['client_name'] = $userName;
+                        $_SESSION['userId'] = $userId;
                         header('location:../../index.php');
                         exit;
                     } else $msg[] = "Your account is locked, please contact support";
                     break;
                 case 2:
                     if ($isVerified == 1) {
+                        $_SESSION['userId'] = $userId;
                         $_SESSION['admin_name'] = $userName;
                         header('location:dashboard.php');
                         exit;
@@ -63,6 +65,7 @@ if (isset($_POST['submit'])) {
                     break;
 
                 case 3:
+                    $_SESSION['userId'] = $userId;
                     $_SESSION['administrator_name'] = $userName;
                     header('location:controlpanel.php');
                     exit;

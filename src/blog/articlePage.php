@@ -1,47 +1,69 @@
+<?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', true);
+
+include "../includes/conn.php";
+session_start();
+
+$userId = $_SESSION['userId'];
+
+if (isset($_GET['article'])) {
+    $articleId = htmlspecialchars($_GET['article']);
+    $select = "SELECT * FROM Articles WHERE articleId = $articleId";
+    $result = mysqli_query($conn, $select);
+    $row = mysqli_fetch_assoc($result);
+    $articleTitle = $row['articleTitle'];
+    $articleContent = $row['articleContent'];
+    $articleUser = $row['userId'];
+    $articleTag = $row['articleTag'];
+} else {
+    header('Location:themes.php');
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php include("../includes/head.html"); ?>
+    <?php include("../includes/head.html") ?>
+    <title><?= $articleTitle ?> | OPEP</title>
 </head>
 
 <body>
     <?php include("../includes/nav_blog.php"); ?>
-    <h1 class="text-center text-lg m-5">Our Blog</h1>
-    <div class="flex justify-between">
-        <div class="w-full m-6">
-            <p class=" bg-white ">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Voluptatem
-                repellendus
-                dolorem
-                distinctio
-                maiores
-                quam nulla, eum sunt quo sapiente perferendis qui suscipit consectetur veritatis. Eligendi cupiditate
-                sequi delectus consequatur provident. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam
-                totam dolorem, vero iste, tenetur quibusdam vitae voluptatem ipsam blanditiis saepe quae! Aut
-                voluptatibus quam error delectus quas! Unde, doloribus repellat.</p>
+    <div class="w-4/5 mx-auto flex flex-col gap-2">
+        <div class="flex flex-row w-full gap-4 items-end mt-8 pl-4">
+            <h1 class="text-3xl font-medium"><?= $articleTitle ?></h1>
+            <p class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
         </div>
+        <div class="w-full shadow-xl rounded-xl border">
+            <p class="p-4">
+                <?= $articleContent ?>
+            </p>
+        </div>
+        <div class="flex flex-col">
+            <h1 class="text-xl font-medium pl-4">Comments</h1>
+        </div>
+        <div class="flex flex-col gap-4 w-4/5">
+            <textarea name="comment" id="comment" cols="30" rows="5" class="w-full resize-none shadow-xl border-t-2 rounded-xl p-4" placeholder="Leave a comment!"></textarea>
+            <div class="self-end">
+            <button class="px-8 py-2 bg-gray-400 text-white font-semibold rounded-lg ">Comment</button>
+        </div>
+        </div>
+        <div class="w-full">
+            <?php
+            $select = "SELECT * FROM comments WHERE articleId = $articleId";
+            $result = mysqli_query($conn,$select);
+            while($row=mysqli_fetch_assoc($result))
+            ?>
+            <div class="flex flex-col w-full shadow-md rounded-lg border-t-2">
 
-        <aside class="flex justify-end w-full p-6 rounded-lg ">
-            <nav class="w-96 flex justify-center">
-                <div class=" bg-white shadow-lg shadow-gray-300 m-7 p-4  align-middle w-11/12 rounded-lg">
-                    <h3 class="flex justify-between text-white-50"> <a href="./articles.php">Title</a> <span class=" text-xl cursor-pointer hover:text-green-300 "><i class='bx bx-bookmark w-6'></i></span>
-                    </h3>
-                </div>
-            </nav>
-        </aside>
-    </div>
-
-    <div class="flex w-full bg-white">
-        <div class="py-10">
-            <textarea placeholder="Add your comment..." class="p-2 focus:outline-1 focus:outline-blue-500 font-bold border-[0.1px] resize-none h-[120px] border-[#9EA5B1] rounded-md w-[60vw]"></textarea>
-            <div class="flex justify-end">
-                <button class="text-sm font-semibold absolute bg-[#4F46E5] w-fit text-white py-2 rounded px-3">Post</button>
             </div>
         </div>
     </div>
-    </div>
-    <?php include("../includes/footer_blog.html"); ?>
+    <?php include '../includes/footer_blog.html'; ?>
 </body>
 
 </html>
