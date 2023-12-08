@@ -50,8 +50,8 @@
                 <div class="flex items-center justify-center gap-6">
                     <?php if (!isset($_SESSION['client_name']) && !isset($_SESSION['admin_name']) && !isset($_SESSION['administrator_name'])) : ?>
                     <div class="child:text-black hidden md:block">
-                        <a href="login.php" class="border-r border-black pr-2 mr-1"> Log in</a>
-                        <a href="signup.php"> Sign up</a>
+                        <a href="../pages/login.php" class="border-r border-black pr-2 mr-1"> Log in</a>
+                        <a href="../pages/signup.php"> Sign up</a>
                     </div>
                     <?php else : ?>
                     <?php if (isset($_SESSION['client_name'])) : ?>

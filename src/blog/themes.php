@@ -113,6 +113,7 @@ session_start();
         </div>
     </div>
     <?php include("../includes/footer_blog.html"); ?>
+    <script src="../js/burger.js"></script>
 </body>
 
 </html>

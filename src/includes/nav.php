@@ -126,7 +126,7 @@
  <div id="popup" class="popup w-full md:w-[30%] overflow-y-auto">
      <!-- Content -->
      <div class="flex flex-col gap-1">
-         <div class="fixed w-7/12 h-8 bg-[#19911D]">
+         <div class="fixed w-full md:w-7/12 h-8 bg-[#19911D]">
              <div class="flex justify-between h-3 pl-5 pt-2 ">
                  <div onclick="closePopup()" class="text-2xl font-bold cursor-pointer mr-3">
                      <img class="h-12 object-contain" src="../images/next button.svg" alt="">
@@ -178,7 +178,7 @@
                 ?>
 
          </div>
-         <div class="fixed w-[30%] h-14 bottom-0 p-1 bg-white">
+         <div class="fixed w-full md:w-[30%] h-14 bottom-0 p-1 bg-white">
              <div class="flex justify-evenly">
                  <?php if ($count > 0) { ?>
                      <a class="border border-black bg-[#19911D] font-semibold p-1 hover:bg-[#5edb64] rounded-md" href="../pages/checkout.php">Checkout</a>
@@ -190,7 +190,7 @@
          </div>
      </div>
  </div>
- <div id="displaymenu" class="flex flex-col border-2 border-t-0 border-amber-600 items-center justify-center burger-content w-full py-6 hidden md:hidden">
+ <div id="displaymenu" class="flex flex-col border-2 border-t-0 border-amber-600 items-center justify-center burger-content w-full py-6 hidden md:hidden z-50">
      <div class="flex flex-col items-center divide-y-2 gap-6 w-full divide-amber-600">
          <?php if (!isset($_SESSION['client_name']) && !isset($_SESSION['admin_name']) && !isset($_SESSION['administrator_name'])) : ?>
              <div class="child:text-black child:text-lg">

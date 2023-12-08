@@ -74,7 +74,7 @@ if (isset($_POST['addCart'])) {
             echo 'No categories in database';
         } ?>
         <div class="flex flex-col justify-between items-center border-2 border-amber-600 rounded-xl m-2 md:h-fit">
-            <div class="grid gap-20 w-[90%] mt-6 rounded-lg mx-auto text-center grid-cols-2 md:gap-4 md:w-[95%] md:grid-cols-3">
+            <div class="grid gap-4 w-[90%] mt-6 rounded-lg mx-auto text-center grid-cols-2 md:w-[95%] md:grid-cols-3">
                 <!-- content -->
                 <?php
 
@@ -136,7 +136,7 @@ if (isset($_POST['addCart'])) {
                         $image = htmlspecialchars($row['plantImage']);
                         $price = htmlspecialchars($row['plantPrice']);
                 ?>
-                        <div class="flex flex-col justify-center items-center gap-4 w-[80%] mx-auto">
+                        <div class="flex flex-col justify-center items-center gap-4 w-full md:w-[80%] mx-auto">
                             <div class="relative object-contain">
                                 <img id="image" src="../images/Plants/<?php echo $image ?>" alt="">
                                 <div id="hover" class="absolute bottom-0 left-0 w-full bg-white transition-all duration-500 transform translate-y-full opacity-0">

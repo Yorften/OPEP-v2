@@ -163,6 +163,7 @@ if (isset($_GET['theme'])) {
         } ?>
     </div>
     <?php include("../includes/footer_blog.html"); ?>
+    <script src="../js/burger.js"></script>
 </body>
 
 </html>

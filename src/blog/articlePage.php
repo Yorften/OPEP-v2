@@ -49,8 +49,7 @@ if (isset($_GET['article'])) {
         <div class="flex flex-col gap-4 w-4/5">
             <textarea name="comment" id="comment" cols="30" rows="5" class="w-full resize-none shadow-xl border-t-2 rounded-xl p-4" placeholder="Leave a comment!"></textarea>
             <div class="self-end">
-                <input type="text">
-                <button id="addComment" class="px-8 py-2 bg-gray-400 text-white font-semibold rounded-lg ">Comment</button>
+                <button id="addComment" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg ">Comment</button>
             </div>
         </div>
         <div id="comment" class="w-4/5 mt-6">
@@ -80,6 +79,7 @@ if (isset($_GET['article'])) {
     </div>
     <?php include '../includes/footer_blog.html'; ?>
     <script src="../js/comments_ajax.js"></script>
+    <script src="../js/burger.js"></script>
 </body>
 
 </html>

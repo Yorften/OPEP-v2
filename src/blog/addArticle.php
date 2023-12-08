@@ -73,6 +73,7 @@ if (isset($_POST['submit'])) {
             </div>
         </form>
     </div>
+    <script src="../js/burger.js"></script>
 </body>
 
 </html>

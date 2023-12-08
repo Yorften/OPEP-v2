@@ -7,7 +7,7 @@
 <link
     href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Lexend&family=Podkova&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <style>
     html {
         font-family: poppins;
@@ -56,7 +56,7 @@
                 transparent)
     }
 
-    #image:hover + #hover {
+    #image:hover+#hover {
         transform: translate(0, 0);
         opacity: 1;
     }
@@ -92,5 +92,11 @@
         border-radius: 10px;
         background-color: #FFF;
         background-image: -webkit-gradient(linear, 40% 0%, 75% 84%, from(#4D9C41), to(#19911D), color-stop(.6, #54DE5D));
+    }
+
+    @media only screen and (max-width: 768px) {
+        .popup {
+            right: -100%;
+        }
     }
 </style>
