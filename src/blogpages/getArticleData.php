@@ -6,9 +6,8 @@ if (isset($_GET["idTh"])) {
     $output = "";
 
     $idTheme = $_GET["idTh"];
-    echo $output = $idTheme;
 
-    $queryTheme = "SELECT * FROM Articles WHERE themeId = ?";
+    $queryTheme = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ?";
     $params = array($idTheme);
 
     if (isset($_GET["search"])) {
@@ -34,6 +33,7 @@ if (isset($_GET["idTh"])) {
                 $articleTitle = $results['articleTitle'];
                 $articleContent = $results['articleContent'];
                 $userId = $results['userId'];
+                $userName = $results['userName'];
                 // get first 30 words from article
                 $words = explode(' ', $articleContent);
                 $articleDesc = implode(' ', array_slice($words, 0, 30));

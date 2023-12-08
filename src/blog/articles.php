@@ -72,7 +72,7 @@ if (isset($_GET['theme'])) {
                 $start = $page * $rows_per_page;
             }
 
-            $select = "SELECT * FROM Articles JOIN users ON Articles.userId = users.userId WHERE themeId = ? LIMIT ?,?";
+            $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ? LIMIT ?,?";
             $stmt = $conn->prepare($select);
             $stmt->bind_param("iii", $themeId, $start, $rows_per_page);
             $stmt->execute();

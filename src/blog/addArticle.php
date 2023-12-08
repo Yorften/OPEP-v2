@@ -17,7 +17,7 @@ if (isset($_GET['theme'])) {
 
 if (isset($_POST['submit'])) {
 
-    $articleTitle = mysqli_real_escape_string($conn, $_POST['title']);
+    $articleTitle = $_POST['title'];
     $articleContent = $_POST['content'];
     $articleTag = mysqli_real_escape_string($conn, $_POST['tag']);
 
@@ -50,8 +50,8 @@ if (isset($_POST['submit'])) {
     <?php include("../includes/nav_blog.php"); ?>
     <div class="h-[70vh] w-4/5 mx-auto shadow-xl rounded-xl border mt-4">
         <form method="POST" class="flex flex-col justify-around items-center h-full">
-            <input type="text" name="title" id="title" placeholder="Title" class="p-1 w-3/4 shadow-md">
-            <textarea name="content" id="content" cols="30" rows="10" placeholder="Article content" class="w-3/4 shadow-md p-1 border-t-2 rounded-md"></textarea>
+            <input type="text" name="title" id="title" placeholder="Title" class="p-1 w-3/4 shadow-lg border-t-2 rounded-lg">
+            <textarea name="content" id="content" cols="30" rows="10" placeholder="Article content" class="w-3/4 shadow-md p-1 border-t-2 rounded-lg"></textarea>
             <div class="flex w-3/4 justify-between items-center">
                 <select name="tag" id="tag" class="block leading-5 text-gray-700 bg-white border-transparent rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300 w-[30%] h-[40px]">
                     <option value="" hidden selected>Select tag...</option>

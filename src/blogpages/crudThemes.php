@@ -88,7 +88,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
     $rows = $records->num_rows;
 
     $start = 0;
-    $rows_per_page = 4;
+    $rows_per_page = 3;
     if (isset($_GET['page'])) {
         $page = $_GET['page'] - 1;
         $start = $page * $rows_per_page;
