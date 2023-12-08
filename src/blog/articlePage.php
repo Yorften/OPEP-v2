@@ -55,7 +55,7 @@ if (isset($_GET['article'])) {
             <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
                 <div class="self-end p-2">
                     <a href="editArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-amber-500">Modify</a>
-                    <button onclick="deleteArticle(<?= $articleId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
+                    <a href="deleteArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-red-500"> Delete </a>
                 </div>
             <?php } ?>
         </div>

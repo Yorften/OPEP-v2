@@ -84,6 +84,7 @@ if (isset($_GET['theme'])) {
                     $articleTitle = $row['articleTitle'];
                     $articleContent = $row['articleContent'];
                     $userName = $row['userName'];
+                    $articleTag = $row['articleTag'];
                     // get first 30 words from article
                     $words = explode(' ', $articleContent);
                     $articleDesc = implode(' ', array_slice($words, 0, 30));
@@ -91,7 +92,9 @@ if (isset($_GET['theme'])) {
             ?>
                     <div class=" bg-white shadow-lg shadow-gray-300 m-4 p-4 rounded-lg">
 
-                        <a href="articlePage.php?article=<?= $articleId ?>" class="flex justify-between text-white-50 font-medium hover:text-gray-500"><?= $articleTitle ?></a>
+                        <a href="articlePage.php?article=<?= $articleId ?>" class="flex justify-between text-white-50 font-medium hover:text-gray-500"><?= $articleTitle ?><span>
+                                <p class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
+                            </span></a>
                         <p class="text-gray-800 m-2"><?= $articleDesc ?>...<span><a href="articlePage.php?article=<?= $articleId ?>"><span class="hover:text-gray-500 font-medium">Read more</span></a></span></p>
                         <div class="flex justify-between m-1">
                             <small class="text-gray-500 flex items-center">
