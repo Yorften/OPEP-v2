@@ -53,14 +53,14 @@ if (isset($_GET['theme'])) {
             ?>
         </div>
         <div class="flex items-center justify-center bg-gray-100 rounded border border-gray-200 mt-4 w-1/4 mx-auto">
-            <input type="text" name="search" placeholder="Search" class="flex items-center align-middle justify-center bg-transparent py-1 text-gray-600 px-4 focus:outline-none w-full" />
+            <input id="search-bar" type="text" name="search" placeholder="Search" class="flex items-center align-middle justify-center bg-transparent py-1 text-gray-600 px-4 focus:outline-none w-full" />
             <button class="py-2 px-4 bg-[#bdff72] text-black rounded-r border-l border-gray-200 hover:bg-gray-50 active:bg-gray-200 disabled:opacity-50 inline-flex items-center focus:outline-none">
                 Search
             </button>
         </div>
     </header>
     <div class="flex flex-col justify-between items-center h-[90vh]">
-        <div id="search" class="w-11/12 mx-auto">
+        <div class="w-11/12 mx-auto article">
             <?php
             $records = $conn->query("SELECT * FROM Articles WHERE themeId = $themeId");
             $rows = $records->num_rows;
@@ -164,6 +164,7 @@ if (isset($_GET['theme'])) {
     </div>
     <?php include("../includes/footer_blog.html"); ?>
     <script src="../js/burger.js"></script>
+    <script src="../js/search.js"></script>
 </body>
 
 </html>
