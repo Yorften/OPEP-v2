@@ -11,7 +11,7 @@ if (isset($_GET["idTh"])) {
     $params = array($idTheme);
 
     if (isset($_GET["search"])) {
-        $search = $_GET["search"] . '%';
+        $search ='%' . $_GET["search"] . '%';
         $queryTheme .= " AND articleTitle LIKE ?";
         $params[] = $search;
     }
@@ -46,7 +46,7 @@ if (isset($_GET["idTh"])) {
                 <div class="flex justify-between m-1">
                     <small class="text-gray-500 flex items-center">
                         <i class="bx bx-user text-black text-xl rounded-xl border-black"></i>
-                        <p>Poted By' . $userName . '</p>
+                        <p>Poted By ' . $userName . '</p>
                     </small>
                 </div>
             </div>

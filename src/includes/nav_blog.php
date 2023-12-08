@@ -7,14 +7,24 @@
     <ul class="font-poppins text-black text-sm list-none [&>*]:inline-block [&>*]:mr-3 hidden md:block">
         <?php if (isset($_SESSION['admin_name'])) : ?>
         <li>
-            <a href="dashboard.php" class="p-2 bg-neutral-600/30 rounded-xl">
+            <a href="../pages/dashboard.php" class="p-2 bg-neutral-600/30 rounded-xl">
                 <span>DASHBOARD</span>
+            </a>
+        </li>
+        <li>
+            <a href="themes.php">
+                <span>BLOG</span>
             </a>
         </li>
         <?php elseif (isset($_SESSION['administrator_name'])) : ?>
         <li>
-            <a href="controlpanel.php" class="p-2 bg-neutral-600/30 rounded-xl">
+            <a href="../pages/controlpanel.php" class="p-2 bg-neutral-600/30 rounded-xl">
                 <span>CONTROL PANEL</span>
+            </a>
+        </li>
+        <li>
+            <a href="themes.php">
+                <span>BLOG</span>
             </a>
         </li>
         <?php else : ?>
@@ -120,10 +130,20 @@
                 <span>CONTROLPANEL</span>
             </a>
         </div>
+        <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
+            <a href="themes.php">
+                <span>BLOG</span>
+            </a>
+        </div>
         <?php elseif (isset($_SESSION['admin_name'])) : ?>
         <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
             <a href="../pages/dashboard.php">
                 <span>DASHBOARD</span>
+            </a>
+        </div>
+        <div class="pt-6 text-xl font-semibold w-[90%] flex justify-center">
+            <a href="themes.php">
+                <span>BLOG</span>
             </a>
         </div>
         <?php else : ?>

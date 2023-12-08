@@ -955,8 +955,28 @@ video {
   width: 100%;
 }
 
+.w-\[1\/12\] {
+  width: 1/12;
+}
+
+.w-\[5\%\] {
+  width: 5%;
+}
+
+.w-\[2\/12\] {
+  width: 2/12;
+}
+
+.w-\[15\%\] {
+  width: 15%;
+}
+
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.table-auto {
+  table-layout: auto;
 }
 
 .table-fixed {
@@ -1363,6 +1383,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
 .bg-\[url\(\'\/OPEP-v2\/src\/images\/hero\.webp\'\)\] {
   background-image: url('/OPEP-v2/src/images/hero.webp');
 }
@@ -1533,6 +1558,10 @@ video {
   padding-top: 1.5rem;
 }
 
+.pt-0 {
+  padding-top: 0px;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1633,6 +1662,11 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -1749,6 +1783,11 @@ video {
 .hover\:text-green-300:hover {
   --tw-text-opacity: 1;
   color: rgb(134 239 172 / var(--tw-text-opacity));
+}
+
+.hover\:text-gray-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
 }
 
 .focus\:border-blue-300:focus {

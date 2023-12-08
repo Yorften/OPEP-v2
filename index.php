@@ -159,10 +159,20 @@ session_start();
                             <span>DASHBOARD</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="src/blog/themes.php">
+                            <span>BLOG</span>
+                        </a>
+                    </li>
                 <?php elseif (isset($_SESSION['administrator_name'])) : ?>
                     <li>
                         <a href="src/pages/controlpanel.php" class="p-2 bg-neutral-600/30 rounded-xl">
                             <span>CONTROL PANEL</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="src/blog/themes.php">
+                            <span>BLOG</span>
                         </a>
                     </li>
                 <?php else : ?>

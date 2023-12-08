@@ -9,13 +9,15 @@ $userId = $_SESSION['userId'];
 
 if (isset($_GET['article'])) {
     $articleId = htmlspecialchars($_GET['article']);
-    $select = "SELECT * FROM Articles WHERE articleId = $articleId";
+    $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE articleId = $articleId";
     $result = mysqli_query($conn, $select);
     $row = mysqli_fetch_assoc($result);
     $articleTitle = $row['articleTitle'];
     $articleContent = $row['articleContent'];
     $articleUser = $row['userId'];
     $articleTag = $row['articleTag'];
+    $authorName = $row['userName'];
+    $authorId = $row['userId'];
 } else {
     header('Location:themes.php');
     exit;
@@ -38,10 +40,24 @@ if (isset($_GET['article'])) {
             <h1 class="text-3xl font-medium"><?= $articleTitle ?></h1>
             <p class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
         </div>
-        <div class="w-full shadow-xl rounded-xl border">
-            <p class="p-8">
+        <div class="flex flex-col w-full shadow-xl rounded-xl border">
+            <p class="pl-8 py-4 font-medium text-lg text-gray-600">
+                <?= $authorName ?>
+            </p>
+            <p class="p-8 pt-0">
                 <?= $articleContent ?>
             </p>
+            <?php if ($userId == $authorId) { ?>
+                <div class="self-end p-2">
+                    <a href="editArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-amber-500">Modify</a>
+                    <button onclick="deleteArticle(<?= $articleId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
+                </div>
+            <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
+                <div class="self-end p-2">
+                    <a href="editArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-amber-500">Modify</a>
+                    <button onclick="deleteArticle(<?= $articleId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
+                </div>
+            <?php } ?>
         </div>
         <div class="flex flex-col mt-6">
             <h1 class="text-xl font-medium pl-4">Comments</h1>
@@ -65,13 +81,13 @@ if (isset($_GET['article'])) {
                     $row2 = mysqli_fetch_assoc($result2);
                     $userName = $row2['userName'];
             ?>
-                    <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4">
+                    <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 bg-gray-200">
                         <h1 class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl rounded-xl border-gray-500'></i><?= $userName ?></h1>
                         <p><?= $commentContent ?></p>
                     </div>
                 <?php }
             } else { ?>
-                <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 text-center">
+                <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 text-center bg-gray-200">
                     <p>No comments</p>
                 </div>
             <?php    } ?>
