@@ -1750,6 +1750,15 @@ video {
   font-weight: 300;
 }
 
+.hover\:border:hover {
+  border-width: 1px;
+}
+
+.hover\:border-red-500:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(239 68 68 / var(--tw-border-opacity));
+}
+
 .hover\:bg-\[\#5edb64\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(94 219 100 / var(--tw-bg-opacity));
@@ -1788,6 +1797,11 @@ video {
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+
+.hover\:text-red-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .focus\:border-blue-300:focus {

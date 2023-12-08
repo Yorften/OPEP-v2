@@ -63,26 +63,38 @@ if (isset($_GET['article'])) {
             <h1 class="text-xl font-medium pl-4">Comments</h1>
         </div>
         <div class="flex flex-col gap-4 w-4/5">
+            <div class="bg-red-500 mb-3 px-2 rounded-lg w-full">
+                <p id="addErr" class="text-white text-lg text-center"></p>
+            </div>
             <textarea name="comment" id="comment" cols="30" rows="5" class="w-full resize-none shadow-xl border-t-2 rounded-xl p-4" placeholder="Leave a comment!"></textarea>
+            <input type="hidden" name="sessionid" id="sessionid" value="<?= $userId ?>">
+            <input type="hidden" name="articleid" id="articleid" value="<?= $articleId ?>">
             <div class="self-end">
                 <button id="addComment" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg ">Comment</button>
             </div>
         </div>
-        <div id="comment" class="w-4/5 mt-6">
+        <div id="comments" class="flex flex-col gap-4 w-4/5 mt-6 p-2 bg-gray-200 rounded-lg">
             <?php
             $select = "SELECT * FROM comments WHERE articleId = $articleId";
             $result = mysqli_query($conn, $select);
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
+                    $commentId = $row['commentId'];
                     $userSession = $row['userSession'];
-                    $commentContent = $row['commentContent'];
+                    $commentContent = htmlspecialchars_decode($row['commentContent']);
                     $user = "SELECT * FROM users WHERE userId = $userSession";
                     $result2 = mysqli_query($conn, $user);
                     $row2 = mysqli_fetch_assoc($result2);
                     $userName = $row2['userName'];
             ?>
-                    <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 bg-gray-200">
-                        <h1 class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl rounded-xl border-gray-500'></i><?= $userName ?></h1>
+                    <div class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4">
+                        <div class="flex w-full justify-between">
+                            <h1 class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
+                            <div>
+                                <i onclick="openpopup(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                <i onclick="deleteComment(<?= $commentId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                            </div>
+                        </div>
                         <p><?= $commentContent ?></p>
                     </div>
                 <?php }
