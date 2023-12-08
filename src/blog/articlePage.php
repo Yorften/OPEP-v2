@@ -79,6 +79,7 @@ if (isset($_GET['article'])) {
             $result = mysqli_query($conn, $select);
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
+                    $articleId = $row['articleId'];
                     $commentId = $row['commentId'];
                     $userSession = $row['userSession'];
                     $commentContent = htmlspecialchars_decode($row['commentContent']);
@@ -90,10 +91,17 @@ if (isset($_GET['article'])) {
                     <div class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4">
                         <div class="flex w-full justify-between">
                             <h1 class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
-                            <div>
-                                <i onclick="openpopup(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                                <i onclick="deleteComment(<?= $commentId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                            </div>
+                            <?php if ($userId == $userSession) { ?>
+                                <div>
+                                    <i onclick="openpopup(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                    <i onclick="deleteComment(<?= $commentId ?>,<?= $articleId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                </div>
+                            <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
+                                <div>
+                                    <i onclick="openpopup(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                    <i onclick="deleteComment(<?= $commentId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                </div>
+                            <?php } ?>
                         </div>
                         <p><?= $commentContent ?></p>
                     </div>

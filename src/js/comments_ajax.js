@@ -3,7 +3,7 @@
 
 const addbtn = document.getElementById("addComment");
 
-addbtn.addEventListener("click", (event) => {
+addbtn.addEventListener("click", () => {
   var textarea = document.getElementById("comment");
   var commentContent = document.getElementById("comment").value;
   var sesstionId = document.getElementById("sessionid").value;
@@ -28,6 +28,7 @@ addbtn.addEventListener("click", (event) => {
   xhr.open("POST", "http:../blogpages/crudComments.php", true);
   xhr.onload = () => {
     if (xhr.status === 200) {
+      textarea.value = "";
       getComments(articleId);
     } else {
       console.log("Error while sending request");
@@ -40,7 +41,6 @@ addbtn.addEventListener("click", (event) => {
     articleId: articleId,
   };
   var jsonData = JSON.stringify(comment);
-  textarea.innerHTML = "abc";
   xhr.send(jsonData);
 });
 
@@ -49,16 +49,19 @@ addbtn.addEventListener("click", (event) => {
 
 function deleteComment(commentId, articleId) {
   var xhr = new XMLHttpRequest();
+  console.log(articleId);
   xhr.open("POST", "../blogpages/crudComments.php", true);
-  const data = JSON.stringify({ commentId: commentId });
-  xhr.send(data);
   xhr.onload = () => {
     if (xhr.status === 200) {
+      console.log(xhr.response);
       getComments(articleId);
     } else {
       console.log("Error while sending request");
     }
   };
+  const data = JSON.stringify({ commentId: commentId });
+  console.log(data);
+  xhr.send(data);
 }
 // --------------------------------------------
 // Edit Comment
@@ -121,6 +124,7 @@ function getComments(articleId) {
   xhr.onload = () => {
     if (xhr.status === 200) {
       let data = xhr.response;
+      console.log(data);
       comment.innerHTML = data;
     } else {
       console.log("Error while sending request");
@@ -130,6 +134,7 @@ function getComments(articleId) {
     articleId2: articleId,
   };
   var jsondata = JSON.stringify(id);
+  console.log(jsondata);
   xhr.send(jsondata);
 }
 
