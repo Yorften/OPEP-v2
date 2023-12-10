@@ -98,6 +98,7 @@ if (!empty($data['articleId2'])) {
                 echo '</div>
                     <p id="p' . $commentId . '">[Deleted comment]</p>
                 </div>';
+            } elseif ($isDeleted == 1) {
             } else {
                 echo '
                 <div id="comment' . $commentId . '" class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4">

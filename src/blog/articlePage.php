@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(E_ALL);
 
 include "../includes/conn.php";
 session_start();
@@ -115,7 +118,9 @@ if (isset($_GET['article'])) {
                             <p id="p<?= $commentId ?>">[Deleted comment]</p>
                         </div>
 
-                    <?php } else {  ?>
+                    <?php } elseif ($isDeleted == 1) {  ?>
+
+                    <?php  } else { ?>
                         <div id="comment<?= $commentId ?>" class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4">
                             <div class="flex w-full justify-between">
                                 <h1 id="user<?= $commentId ?>" class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
@@ -133,8 +138,7 @@ if (isset($_GET['article'])) {
                             </div>
                             <p id="p<?= $commentId ?>"><?= $commentContent ?></p>
                         </div>
-
-                <?php  }
+                <?php }
                 }
             } else { ?>
                 <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 text-center bg-gray-200">
