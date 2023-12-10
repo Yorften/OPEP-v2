@@ -56,6 +56,8 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                     $articleId = $row['articleId'];
                                     $articleTitle = $row['articleTitle'];
                                     $articleTag = $row['articleTag'];
+                                    $isDeleted = $row['isDeleted'];
+
                                     $userName = $row['userName'];
                                     $themeName = $row['themeName'];
 
@@ -66,8 +68,11 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                         <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $themeName ?></td>
                                         <td class="px-4 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base"><?= $articleTag ?></td>
                                         <td class="px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">
-                                            <a href="../blog/editArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-amber-500"> Modify </a>
-                                            <button onclick="deleteArticle(<?= $articleId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
+                                            <?php if ($isDeleted == 0) { ?>
+                                                <a href="../blogpages/deleteArticle.php?articleId=<?= $articleId ?>" class="px-2 rounded-md bg-green-400"> Active </a>
+                                            <?php } else { ?>
+                                                <a href="../blogpages/deleteArticle.php?articleId=<?= $articleId ?>" class="px-2 rounded-md bg-red-400"> Archived </a>
+                                            <?php } ?>
                                         </td>
                                     </tr>
 

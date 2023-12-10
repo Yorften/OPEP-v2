@@ -7,8 +7,12 @@ if (isset($_GET['theme'])) {
     $themeId = htmlspecialchars($_GET['theme']);
     $select = "SELECT * FROM themes WHERE themeId = $themeId";
     $result = mysqli_query($conn, $select);
-    $row = mysqli_fetch_assoc($result);
-    $themeName = $row['themeName'];
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $themeName = $row['themeName'];
+    } else {
+        header('Location:themes.php');
+    }
 } else header('Location:themes.php');
 ?>
 
@@ -63,7 +67,7 @@ if (isset($_GET['theme'])) {
     <div class="flex flex-col justify-between items-center">
         <div class="w-11/12 mx-auto article">
             <?php
-            $records = $conn->query("SELECT * FROM Articles WHERE themeId = $themeId");
+            $records = $conn->query("SELECT * FROM Articles WHERE themeId = $themeId AND isDeleted = 0");
             $rows = $records->num_rows;
 
             $start = 0;
@@ -73,7 +77,7 @@ if (isset($_GET['theme'])) {
                 $start = $page * $rows_per_page;
             }
 
-            $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ? LIMIT ?,?";
+            $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ? AND isDeleted = 0 LIMIT ?,?";
             $stmt = $conn->prepare($select);
             $stmt->bind_param("iii", $themeId, $start, $rows_per_page);
             $stmt->execute();
@@ -87,8 +91,7 @@ if (isset($_GET['theme'])) {
                     $userName = $row['userName'];
                     $articleTag = $row['articleTag'];
                     // get first 30 words from article
-                    $words = explode(' ', $articleContent);
-                    $articleDesc = implode(' ', array_slice($words, 0, 30));
+                    $articleDesc = substr($articleContent, 0, 210);
 
             ?>
                     <div class=" bg-white shadow-lg shadow-gray-300 m-4 p-4 rounded-lg">

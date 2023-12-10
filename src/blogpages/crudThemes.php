@@ -44,6 +44,12 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
 
     if (!empty($data['themeId'])) {
         $themeId =  $data['themeId'];
+
+        $update = "UPDATE articles SET themeId = NULL WHERE themeId = ?";
+        $stmt = $conn->prepare($update);
+        $stmt->bind_param("i", $themeId);
+        $stmt->execute();
+
         $delete = "DELETE FROM themes WHERE themeId = ?";
         $stmt = $conn->prepare($delete);
         $stmt->bind_param("i", $themeId);
@@ -109,7 +115,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
             <thead class="border">
                 <tr class="border-2">
                     <th class="w-1/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Theme Id</th>
-                    <th class="w-5/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Title</th>
+                    <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Title</th>
                     <th class="w-4/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Tags</th>
                     <th class="w-2/12 px-4 py-2 border-2 border-[#A3A3A3] text-xs md:text-base">Action</th>
                 </tr>
@@ -119,7 +125,6 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
         while ($row = mysqli_fetch_assoc($result)) {
             $themeId = htmlspecialchars($row['themeId']);
             $themeName = htmlspecialchars($row['themeName']);
-
 
             echo "
             <tr>

@@ -4,7 +4,7 @@ session_start();
 
 $userId = $_SESSION['userId'];
 
-if (!isset($_SESSION['client_name']) && !isset($_SESSION['client_name']) && !isset($_SESSION['client_name'])) {
+if (!isset($_SESSION['client_name']) && !isset($_SESSION['admin_name']) && !isset($_SESSION['administrator_name'])) {
     header('location:../pages/login.php');
 }
 
