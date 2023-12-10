@@ -22,12 +22,12 @@ if (isset($_GET['theme'])) {
 
 <body>
     <?php include("../includes/nav_blog.php"); ?>
-    <header class="flex flex-col justify-between items-center h-[40vh] py-8 bg-white shadow-lg text-center">
-        <div class="flex justify-between items-center w-[60%] mx-auto">
-            <h1 class="text-3xl"><?= $themeName ?></h1>
-            <a href="addArticle.php?theme=<?= $themeId ?>" class="px-4 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]">Add article +</a>
+    <header class="flex flex-col justify-between items-center h-[30vh] md:h-[40vh] py-8 bg-white shadow-lg text-center">
+        <div class="flex justify-between items-center gap-4 sm:gap-4 md:w-[60%] mx-auto">
+            <h1 class="text-2xl md:text-3xl"><?= $themeName ?></h1>
+            <a href="addArticle.php?theme=<?= $themeId ?>" class="px-2 py-1 md:px-4 md:py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]">Add article +</a>
         </div>
-        <div class="flex flex-wrap mx-auto justify-between w-[60%]">
+        <div class="flex flex-wrap mx-auto justify-evenly w-[90%] md:w-[60%] child:mb-3">
             <div>
                 <input type="radio" id="all" name="tags" class="peer hidden" value="all" checked />
                 <label for="all" class="w-full p-1 px-4 border-2 rounded-xl select-none cursor-pointer peer-checked:border-amber-600 peer-checked:text-amber-600">
@@ -53,14 +53,14 @@ if (isset($_GET['theme'])) {
             <?php }
             ?>
         </div>
-        <div class="flex items-center justify-center bg-gray-100 rounded border border-gray-200 mt-4 w-1/4 mx-auto">
+        <div class="flex items-center justify-center bg-gray-100 rounded border border-gray-200 mt-4 w:3/4 md:w-1/4 mx-auto">
             <input id="search-bar" type="text" name="search" placeholder="Search" class="flex items-center align-middle justify-center bg-transparent py-1 text-gray-600 px-4 focus:outline-none w-full" />
             <button class="py-2 px-4 bg-[#bdff72] text-black rounded-r border-l border-gray-200 hover:bg-gray-50 active:bg-gray-200 disabled:opacity-50 inline-flex items-center focus:outline-none">
                 Search
             </button>
         </div>
     </header>
-    <div class="flex flex-col justify-between items-center h-[90vh]">
+    <div class="flex flex-col justify-between items-center">
         <div class="w-11/12 mx-auto article">
             <?php
             $records = $conn->query("SELECT * FROM Articles WHERE themeId = $themeId");

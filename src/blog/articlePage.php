@@ -44,9 +44,9 @@ if (isset($_GET['article'])) {
 
 <body>
     <?php include("../includes/nav_blog.php"); ?>
-    <div class="w-4/5 mx-auto flex flex-col gap-2">
+    <div class="w-[95%] md:w-4/5 mx-auto flex flex-col gap-2">
         <div class="flex flex-row w-full gap-4 items-end mt-8 pl-4">
-            <h1 class="text-3xl font-medium"><?= $articleTitle ?></h1>
+            <h1 class="text-2xl md:text-3xl font-medium"><?= $articleTitle ?></h1>
             <p class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
         </div>
         <div class="flex flex-col w-full shadow-xl rounded-xl border">
@@ -66,14 +66,14 @@ if (isset($_GET['article'])) {
                     </div>
                 <?php } ?>
             </div>
-            <p class="p-8 pt-0">
+            <p class="p-4 md:p-8 pt-0">
                 <?= $articleContent ?>
             </p>
         </div>
         <div class="flex flex-col mt-6">
-            <h1 class="text-xl font-medium pl-4">Comments</h1>
+            <h1 class="text-2xl font-medium pl-4">Comments</h1>
         </div>
-        <div class="flex flex-col gap-4 w-4/5">
+        <div class="flex flex-col gap-4 w-[95%] mx-auto md:mx-0 md:w-4/5">
             <div class="bg-red-500 mb-3 px-2 rounded-lg w-full">
                 <p id="addErr" class="text-white text-lg text-center"></p>
             </div>
@@ -81,10 +81,10 @@ if (isset($_GET['article'])) {
             <input type="hidden" name="sessionid" id="sessionid" value="<?= $userId ?>">
             <input type="hidden" name="articleid" id="articleid" value="<?= $articleId ?>">
             <div class="self-end">
-                <button id="addComment" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg ">Comment</button>
+                <button id="addComment" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg">Comment</button>
             </div>
         </div>
-        <div id="comments" class="flex flex-col gap-4 w-4/5 mt-6 p-2 bg-gray-200 rounded-lg">
+        <div id="comments" class="flex flex-col gap-4 w-[95%] mx-auto md:mx-0 md:w-4/5 mt-6 p-2 bg-gray-100 rounded-lg">
             <?php
             $select = "SELECT * FROM comments WHERE articleId = $articleId";
             $result = mysqli_query($conn, $select);
@@ -102,7 +102,7 @@ if (isset($_GET['article'])) {
 
                     if (($isDeleted == 1 && $userId == $userSession) || isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) {
             ?>
-                        <div id="comment<?= $commentId ?>" class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4 bg-red-500/30">
+                        <div id="comment<?= $commentId ?>" class="flex flex-col w-full shadow-md border-t-2 p-2 pl-4 bg-red-500/30">
                             <div class="flex w-full justify-between">
                                 <h1 id="user<?= $commentId ?>" class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
                                 <?php if ($userId == $userSession) { ?>

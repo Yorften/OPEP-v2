@@ -16,7 +16,7 @@ session_start();
     <?php include("../includes/nav_blog.php"); ?>
     <h1 class="text-center m-4 text-xl">THE HOUSEPLANT & URBAN JUNGLE BLOG</h1>
     <div class="flex flex-col justify-center items-center">
-        <div class="w-[70%] mx-auto h-[80vh]">
+        <div class="flex flex-col items-center w-[90%] mx-auto h-[70vh] md:h-[90vh] md:w-[70%]">
             <?php
             $records = $conn->query("SELECT * FROM themes");
             $rows = $records->num_rows;
