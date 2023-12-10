@@ -19,8 +19,10 @@ if (isset($_GET['article'])) {
         $row = mysqli_fetch_assoc($result);
         $articleTitle = $row['articleTitle'];
         $articleContent = $row['articleContent'];
+        $articleContent = str_replace('&#10;', "<br>", $articleContent);
         $articleUser = $row['userId'];
         $articleTag = $row['articleTag'];
+        $themeId = $row['themeId'];
         $authorName = $row['userName'];
         $authorId = $row['userId'];
         $isDeleted = $row['isDeleted'];
@@ -69,31 +71,32 @@ if (isset($_GET['article'])) {
         </div>
     </div>
     <?php include("../includes/nav_blog.php"); ?>
-    <div id="article" class="w-[95%] md:w-4/5 mx-auto flex flex-col gap-2">
-        <div class="flex flex-row w-full gap-4 items-end mt-8 pl-4">
-            <h1 id="title" class="text-2xl md:text-3xl font-medium"><?= $articleTitle ?></h1>
-            <p id="tag" class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
-        </div>
-        <div class="flex flex-col w-full shadow-xl rounded-xl border">
-            <div class="w-full flex justify-between items-center">
-                <p class="pl-8 py-4 font-medium text-lg text-gray-600">
-                    <?= $authorName ?>
-                </p>
-                <?php if ($userId == $authorId) { ?>
-                    <div class="p-2">
-                        <i onclick="editArticle(<?= $articleId ?>)" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                        <i onclick="openPopup()" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                    </div>
-                <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
-                    <div class="p-2">
-                        <i onclick="editArticle(<?= $articleId ?>)" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                        <i onclick="openPopup()" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                    </div>
-                <?php } ?>
+    <div class="w-[95%] md:w-4/5 mx-auto flex flex-col gap-2">
+        <div id="article" class="w-full flex flex-col gap-2">
+            <input type="hidden" name="themeId" id="themeId" value="<?= $themeId ?>">
+            <div class="flex flex-row w-full gap-4 items-end mt-8 pl-4">
+                <h1 id="title" class="text-2xl md:text-3xl font-medium"><?= $articleTitle ?></h1>
+                <p id="tag" class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
             </div>
-            <p id="content" class="p-4 md:p-8 pt-0">
-                <?= $articleContent ?>
-            </p>
+            <div class="flex flex-col w-full shadow-xl rounded-xl border">
+                <div class="w-full flex justify-between items-center">
+                    <p class="pl-8 py-4 font-medium text-lg text-gray-600">
+                        <?= $authorName ?>
+                    </p>
+                    <?php if ($userId == $authorId) { ?>
+                        <div class="p-2">
+                            <i onclick="editArticle(<?= $articleId ?>)" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                            <i onclick="openPopup()" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                        </div>
+                    <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
+                        <div class="p-2">
+                            <i onclick="editArticle(<?= $articleId ?>)" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                            <i onclick="openPopup()" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                        </div>
+                    <?php } ?>
+                </div>
+                <p id="content" class="p-4 md:p-8 pt-0"><?= $articleContent ?>  </p>
+            </div>
         </div>
         <div class="flex flex-col mt-6">
             <h1 class="text-2xl font-medium pl-4">Comments</h1>

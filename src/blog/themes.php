@@ -14,11 +14,11 @@ session_start();
 
 <body class=" h-[84vh]">
     <?php include("../includes/nav_blog.php"); ?>
-    <h1 class="text-center m-4 text-xl">THE HOUSEPLANT & URBAN JUNGLE BLOG</h1>
+    <h1 class="text-center m-4 text-xl">OPEP BLOG</h1>
     <div class="flex flex-col justify-center items-center">
         <div class="flex flex-col items-center w-[90%] mx-auto h-[70vh] md:h-[90vh] md:w-[70%]">
             <?php
-            $records = $conn->query("SELECT * FROM themes");
+            $records = $conn->query("SELECT * FROM themes WHERE themeDeleted = 0");
             $rows = $records->num_rows;
 
             $start = 0;
@@ -27,7 +27,7 @@ session_start();
                 $page = $_GET['page'] - 1;
                 $start = $page * $rows_per_page;
             }
-            $select = "SELECT * FROM themes LIMIT ?,?";
+            $select = "SELECT * FROM themes WHERE themeDeleted = 0 LIMIT ?,?";
             $stmt = $conn->prepare($select);
             $stmt->bind_param("ii", $start, $rows_per_page);
             $stmt->execute();

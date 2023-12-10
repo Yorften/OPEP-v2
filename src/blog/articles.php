@@ -5,7 +5,7 @@ session_start();
 
 if (isset($_GET['theme'])) {
     $themeId = htmlspecialchars($_GET['theme']);
-    $select = "SELECT * FROM themes WHERE themeId = $themeId";
+    $select = "SELECT * FROM themes WHERE themeId = $themeId AND themeDeleted = 0";
     $result = mysqli_query($conn, $select);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);

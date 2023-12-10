@@ -60,6 +60,9 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
 
                                     $userName = $row['userName'];
                                     $themeName = $row['themeName'];
+                                    if($articleTag === NULL){
+                                        $articleTag = 'None';
+                                    }
 
                                 ?>
                                     <tr>

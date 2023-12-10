@@ -138,7 +138,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
             <div class="border-2 border-gray-300 rounded-xl h-[90vh] w-full flex">
                 <div id="themes" class="flex flex-col justify-between w-full p-4">
                     <?php
-                    $records = $conn->query("SELECT * FROM themes");
+                    $records = $conn->query("SELECT * FROM themes WHERE themeDeleted = 0");
                     $rows = $records->num_rows;
 
                     $start = 0;
@@ -147,7 +147,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                         $page = $_GET['page'] - 1;
                         $start = $page * $rows_per_page;
                     }
-                    $select = "SELECT * FROM themes LIMIT ?,?";
+                    $select = "SELECT * FROM themes WHERE themeDeleted = 0 LIMIT ?,?";
                     $stmt = $conn->prepare($select);
                     $stmt->bind_param("ii", $start, $rows_per_page);
                     $stmt->execute();
@@ -184,11 +184,15 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) { 
                                             $stmt->bind_param("i", $themeId);
                                             $stmt->execute();
                                             $result2 = $stmt->get_result();
-                                            while ($row2 = mysqli_fetch_assoc($result2)) {
-                                                $tagName = $row2['tagName'];
-                                                $tagId = $row2['tagId'];
+                                            if (mysqli_num_rows($result2) > 0) {
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+                                                    $tagName = $row2['tagName'];
+                                                    $tagId = $row2['tagId'];
                                             ?>
-                                                <span class="p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600 mr-[2px]" value="<?= $tagId ?>"><?= $tagName ?></span>
+                                                    <span class="p-1 border-2 rounded-xl select-none border-amber-600 text-amber-600 mr-[2px]" value="<?= $tagId ?>"><?= $tagName ?></span>
+                                                <?php }
+                                            } else { ?>
+                                                <span class="p-1 select-none mr-[2px]" value="">No tags</span>
                                             <?php } ?>
                                         </td>
                                         <td class="px-1 py-2 border-2 text-center border-[#A3A3A3] text-xs md:text-base">

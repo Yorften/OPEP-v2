@@ -18,7 +18,8 @@ if (isset($_GET['theme'])) {
 if (isset($_POST['submit'])) {
 
     $articleTitle = $_POST['title'];
-    $articleContent = $_POST['content'];
+    $articleContent = htmlspecialchars($_POST['content']);
+    $articleContent = str_replace("\n", '&#10;', $articleContent);
     $articleTag = mysqli_real_escape_string($conn, $_POST['tag']);
 
 

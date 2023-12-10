@@ -90,7 +90,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
 
 
 
-    $records = $conn->query("SELECT * FROM themes");
+    $records = $conn->query("SELECT * FROM themes WHERE themeDeleted = 0");
     $rows = $records->num_rows;
 
     $start = 0;
@@ -99,7 +99,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
         $page = $_GET['page'] - 1;
         $start = $page * $rows_per_page;
     }
-    $select = "SELECT * FROM themes LIMIT ?,?";
+    $select = "SELECT * FROM themes WHERE themeDeleted = 0 LIMIT ?,?";
     $stmt = $conn->prepare($select);
     $stmt->bind_param("ii", $start, $rows_per_page);
     $stmt->execute();
