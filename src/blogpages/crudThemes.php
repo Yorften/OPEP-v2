@@ -77,7 +77,7 @@ if (isset($_SESSION['administrator_name']) || isset($_SESSION['admin_name'])) {
             $stmt->execute();
         }
         $stmt->close();
-        echo "Tag inserted successfully!";
+        echo "Tag updated successfully!";
         exit;
     }
 

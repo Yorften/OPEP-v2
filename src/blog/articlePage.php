@@ -1,6 +1,4 @@
 <?php
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', true);
 
 include "../includes/conn.php";
 session_start();
@@ -9,15 +7,23 @@ $userId = $_SESSION['userId'];
 
 if (isset($_GET['article'])) {
     $articleId = htmlspecialchars($_GET['article']);
-    $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE articleId = $articleId";
-    $result = mysqli_query($conn, $select);
-    $row = mysqli_fetch_assoc($result);
-    $articleTitle = $row['articleTitle'];
-    $articleContent = $row['articleContent'];
-    $articleUser = $row['userId'];
-    $articleTag = $row['articleTag'];
-    $authorName = $row['userName'];
-    $authorId = $row['userId'];
+    $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE articleId = ? AND isDeleted = 0";
+    $stmt = $conn->prepare($select);
+    $stmt->bind_param("i", $articleId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $articleTitle = $row['articleTitle'];
+        $articleContent = $row['articleContent'];
+        $articleUser = $row['userId'];
+        $articleTag = $row['articleTag'];
+        $authorName = $row['userName'];
+        $authorId = $row['userId'];
+    } else {
+        header('Location:themes.php');
+        exit;
+    }
 } else {
     header('Location:themes.php');
     exit;
@@ -41,23 +47,25 @@ if (isset($_GET['article'])) {
             <p class="text-sm p-1 rounded-xl border border-gray-500 text-gray-500"><?= $articleTag ?></p>
         </div>
         <div class="flex flex-col w-full shadow-xl rounded-xl border">
-            <p class="pl-8 py-4 font-medium text-lg text-gray-600">
-                <?= $authorName ?>
-            </p>
+            <div class="w-full flex justify-between items-center">
+                <p class="pl-8 py-4 font-medium text-lg text-gray-600">
+                    <?= $authorName ?>
+                </p>
+                <?php if ($userId == $authorId) { ?>
+                    <div class="p-2">
+                        <i onclick="editArticle(<?= $articleId ?>)" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                        <i onclick="deleteArticle(<?= $articleId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                    </div>
+                <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
+                    <div class="p-2">
+                        <i onclick="editArticle(<?= $articleId ?>)" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                        <i onclick="deleteArticle(<?= $articleId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                    </div>
+                <?php } ?>
+            </div>
             <p class="p-8 pt-0">
                 <?= $articleContent ?>
             </p>
-            <?php if ($userId == $authorId) { ?>
-                <div class="self-end p-2">
-                    <a href="editArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-amber-500">Modify</a>
-                    <button onclick="deleteArticle(<?= $articleId ?>)" class="px-2 rounded-md bg-red-500"> Delete </button>
-                </div>
-            <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
-                <div class="self-end p-2">
-                    <a href="editArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-amber-500">Modify</a>
-                    <a href="deleteArticle.php?article=<?= $articleId ?>" class="px-2 rounded-md bg-red-500"> Delete </a>
-                </div>
-            <?php } ?>
         </div>
         <div class="flex flex-col mt-6">
             <h1 class="text-xl font-medium pl-4">Comments</h1>
@@ -83,29 +91,51 @@ if (isset($_GET['article'])) {
                     $commentId = $row['commentId'];
                     $userSession = $row['userSession'];
                     $commentContent = htmlspecialchars_decode($row['commentContent']);
+                    $isDeleted = $row['isDeleted'];
                     $user = "SELECT * FROM users WHERE userId = $userSession";
                     $result2 = mysqli_query($conn, $user);
                     $row2 = mysqli_fetch_assoc($result2);
                     $userName = $row2['userName'];
+
+                    if (($isDeleted == 1 && $userId == $userSession) || isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) {
             ?>
-                    <div class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4">
-                        <div class="flex w-full justify-between">
-                            <h1 class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
-                            <?php if ($userId == $userSession) { ?>
-                                <div>
-                                    <i onclick="openpopup(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                                    <i onclick="deleteComment(<?= $commentId ?>,<?= $articleId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                                </div>
-                            <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
-                                <div>
-                                    <i onclick="openpopup(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                                    <i onclick="deleteComment(<?= $commentId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
-                                </div>
-                            <?php } ?>
+                        <div id="comment<?= $commentId ?>" class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4 bg-red-500/30">
+                            <div class="flex w-full justify-between">
+                                <h1 id="user<?= $commentId ?>" class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
+                                <?php if ($userId == $userSession) { ?>
+                                    <div>
+                                        <p onclick="undoDelete(<?= $commentId ?>,<?= $articleId ?>)" class="cursor-pointer underline text-gray-500">Undo</p>
+                                    </div>
+                                <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
+                                    <div>
+                                        <p onclick="undoDelete(<?= $commentId ?>,<?= $articleId ?>)" class="cursor-pointer underline text-gray-500">Undo</p>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <p id="p<?= $commentId ?>">[Deleted comment]</p>
                         </div>
-                        <p><?= $commentContent ?></p>
-                    </div>
-                <?php }
+
+                    <?php } else {  ?>
+                        <div id="comment<?= $commentId ?>" class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4">
+                            <div class="flex w-full justify-between">
+                                <h1 id="user<?= $commentId ?>" class="text-gray-500"><i class='bx bx-user text-gray-500 text-xl border-gray-500'></i><?= $userName ?></h1>
+                                <?php if ($userId == $userSession) { ?>
+                                    <div>
+                                        <i onclick="editComment(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                        <i onclick="deleteComment(<?= $commentId ?>,<?= $articleId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                    </div>
+                                <?php } else if (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) { ?>
+                                    <div>
+                                        <i onclick="editComment(<?= $commentId ?>,<?= $articleId ?>);" class="bx bx-edit-alt text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                        <i onclick="deleteComment(<?= $commentId ?>,<?= $articleId ?>)" class="bx bx-message-alt-x text-gray-500 text-xl border-gray-500 cursor-pointer"></i>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <p id="p<?= $commentId ?>"><?= $commentContent ?></p>
+                        </div>
+
+                <?php  }
+                }
             } else { ?>
                 <div class="flex flex-col w-full shadow-md rounded-lg border-t-2 p-2 pl-4 text-center bg-gray-200">
                     <p>No comments</p>
