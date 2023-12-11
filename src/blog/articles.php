@@ -72,56 +72,60 @@ if (isset($_GET["tag"])) {
             </button>
         </div>
     </header>
-    <div class="flex flex-col justify-between items-center h-[90vh]">
+    <div class="flex flex-col justify-between items-center min-h-[90vh]">
         <div class="w-11/12 mx-auto article">
             <?php
+            if (isset($_GET['tag']) && $_GET['tag'] != 'All') {
+                $records = "SELECT * FROM articles WHERE themeId = $themeId AND articleTag = ?";
+                $stmt = $conn->prepare($records);
+                $stmt->bind_param("s", $_GET['tag']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $rows = $result->num_rows;
 
-            $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId");
+                $start = 0;
+                $rows_per_page = 10;
+                if (isset($_GET['page'])) {
+                    $page = $_GET['page'] - 1;
+                    $start = $page * $rows_per_page;
+                }
 
-            $rows = $records->num_rows;
 
-            $start = 0;
-            $rows_per_page = 10;
-            if (isset($_GET['page'])) {
-                $page = $_GET['page'] - 1;
-                $start = $page * $rows_per_page;
+
+                $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = $themeId AND articleTag = ? LIMIT ?,?";
+                $stmt = $conn->prepare($select);
+                $stmt->bind_param("sii", $_GET['tag'], $start, $rows_per_page);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $pages = ceil($rows / $rows_per_page);
+            } else {
+                $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId");
+                $rows = $records->num_rows;
+
+                $start = 0;
+                $rows_per_page = 10;
+                if (isset($_GET['page'])) {
+                    $page = $_GET['page'] - 1;
+                    $start = $page * $rows_per_page;
+                }
+
+                $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = $themeId LIMIT ?,?";
+                $stmt = $conn->prepare($select);
+                $stmt->bind_param("ii", $start, $rows_per_page);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $pages = ceil($rows / $rows_per_page);
             }
-
-            $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ?";
-            $params = ['i', $themeId];
-
-            if (isset($_GET['tag']) && !empty($_GET['tag']) && $_GET['tag'] != "All") {
-                $tagItem = $_GET['tag'];
-                $select .= " AND articleTag = ?";
-                $params[0] .= 's';
-                $params[] = $tagItem;
-            }
-            $select .= " LIMIT ?, ?";
-            $params[0] .= 'ii';
-            $params[] = $start;
-            $params[] = $rows_per_page;
-
-            $stmt = $conn->prepare($select);
-
-            $types = $params[0];
-            $stmt->bind_param($types, ...array_slice($params, 1));
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-
-            $rows = $result->num_rows;
-            $pages = ceil($rows / $rows_per_page);
             if ($rows > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-
                     $articleId = $row['articleId'];
                     $articleTitle = $row['articleTitle'];
                     $articleContent = $row['articleContent'];
                     $userName = $row['userName'];
                     $articleTag = $row['articleTag'];
-                    // get first 30 words from article
-                    $words = explode(' ', $articleContent);
-                    $articleDesc = implode(' ', array_slice($words, 0, 30));
+                    // get first 120 characters from article
+                    $articleDesc = substr($articleContent, 0, 120);;
+
 
             ?>
                     <div class=" bg-white shadow-lg shadow-gray-300 m-4 p-4 rounded-lg">
@@ -147,55 +151,106 @@ if (isset($_GET["tag"])) {
             <?php }
             ?>
         </div>
-        <?php if ($rows > 0) { ?>
-            <div class="w-[70%] mx-auto">
-                <div class="pl-6">
-                    <?php
-                    if (!isset($_GET['page'])) {
-                        $page = 1;
-                    } else {
-                        $page = $_GET['page'];
-                    }
-                    ?>
-                    Showing <?php echo $page ?> of <?php echo $pages ?>
-                </div>
-                <div class="flex flex-row justify-center items-center gap-3">
+        <?php if ($rows > 0) {
+            if (!isset($_GET['tag'])) { ?>
+                <div class="w-[70%] mx-auto">
+                    <div class="pl-6">
+                        <?php
+                        if (!isset($_GET['page'])) {
+                            $page = 1;
+                        } else {
+                            $page = $_GET['page'];
+                        }
+                        ?>
+                        Showing <?php echo $page ?> of <?php echo $pages ?>
+                    </div>
+                    <div class="flex flex-row justify-center items-center gap-3">
 
-                    <a href="?page=1">First</a>
-                    <?php if (isset($_GET['page']) && $_GET['page'] > 1) { ?>
+                        <a href="?theme=<?= $themeId ?>&page=1">First</a>
+                        <?php if (isset($_GET['page']) && $_GET['page'] > 1) { ?>
 
-                        <a href="?page=<?php echo $_GET['page'] - 1 ?>">Previous</a>
+                            <a href="?theme=<?= $themeId ?>&page=<?php echo $_GET['page'] - 1 ?>">Previous</a>
 
-                    <?php } else { ?>
-                        <a class="cursor-pointer">Previous</a>
-                    <?php } ?>
-
-                    <?php
-                    for ($i = 1; $i <= $pages; $i++) {
-                    ?>
-                        <a href="?page=<?php echo $i ?>" class=""><?php echo $i ?></a>
-                    <?php
-                    }
-                    ?>
-                    <?php
-                    if (!isset($_GET['page'])) {
-                        if ($pages == 1) {
-                    ?>
-                            <a class="cursor-pointer">Next</a>
                         <?php } else { ?>
-                            <a href="?page=2">Next</a>
+                            <a class="cursor-pointer">Previous</a>
                         <?php } ?>
 
-                    <?php } elseif ($_GET['page'] >= $pages) { ?>
-                        <a class="cursor-pointer">Next</a>
-                    <?php } else { ?>
-                        <a href="?page=<?php echo $_GET['page'] + 1 ?>">Next</a>
-                    <?php }
-                    ?>
-                    <a href="?page=<?php echo $pages ?>">Last</a>
+                        <?php
+                        for ($i = 1; $i <= $pages; $i++) {
+                        ?>
+                            <a href="?theme=<?= $themeId ?>&page=<?php echo $i ?>" class=""><?php echo $i ?></a>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!isset($_GET['page'])) {
+                            if ($pages == 1) {
+                        ?>
+                                <a class="cursor-pointer">Next</a>
+                            <?php } else { ?>
+                                <a href="?theme=<?= $themeId ?>&page=2">Next</a>
+                            <?php } ?>
+
+                        <?php } elseif ($_GET['page'] >= $pages) { ?>
+                            <a class="cursor-pointer">Next</a>
+                        <?php } else { ?>
+                            <a href="?theme=<?= $themeId ?>&page=<?php echo $_GET['page'] + 1 ?>">Next</a>
+                        <?php }
+                        ?>
+                        <a href="?theme=<?= $themeId ?>&page=<?php echo $pages ?>">Last</a>
+                    </div>
                 </div>
-            </div>
-        <?php } else {
+            <?php } else {
+            ?>
+                <div class="w-full mt-4 md:mt-8">
+                    <div class="pl-2 md:pl-8">
+                        <?php
+                        if (!isset($_GET['page'])) {
+                            $page = 1;
+                        } else {
+                            $page = $_GET['page'];
+                        }
+                        ?>
+                        Showing <?php echo $page ?> of <?php echo $pages ?>
+                    </div>
+                    <div class="flex flex-row justify-center items-center gap-3">
+
+                        <a href="?theme=<?= $themeId ?>&page=1&tag=<?php echo $_GET['tag'] ?>">First</a>
+                        <?php if (isset($_GET['page']) && $_GET['page'] > 1) { ?>
+
+                            <a href="?theme=<?= $themeId ?>&page=<?php echo $_GET['page'] - 1 ?>&tag=<?php echo $_GET['tag'] ?>">Previous</a>
+
+                        <?php } else { ?>
+                            <a class="cursor-pointer">Previous</a>
+                        <?php } ?>
+
+                        <?php
+                        for ($i = 1; $i <= $pages; $i++) {
+                        ?>
+                            <a href="?theme=<?= $themeId ?>&page=<?php echo $i ?>&tag=<?php echo $_GET['tag'] ?>" class=""><?php echo $i ?></a>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!isset($_GET['page'])) {
+                            if ($pages == 1) {
+                        ?>
+                                <a class="cursor-pointer">Next</a>
+                            <?php } else { ?>
+                                <a href="?theme=<?= $themeId ?>&page=2&tag=<?php echo $_GET['tag'] ?>">Next</a>
+                            <?php } ?>
+
+                        <?php } elseif ($_GET['page'] >= $pages) { ?>
+                            <a class="cursor-pointer">Next</a>
+                        <?php } else { ?>
+                            <a href="?theme=<?= $themeId ?>&page=<?php echo $_GET['page'] + 1 ?>&tag=<?php echo $_GET['tag'] ?>">Next</a>
+                        <?php }
+                        ?>
+                        <a href="?theme=<?= $themeId ?>&page=<?php echo $pages ?>&tag=<?php echo $_GET['tag'] ?>">Last</a>
+                    </div>
+                </div>
+        <?php }
+        } else {
             echo '';
         } ?>
     </div>

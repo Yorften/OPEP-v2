@@ -166,7 +166,7 @@ if (isset($_POST['addCart'])) {
                     <div class="w-full mt-4 md:mt-8">
                         <div class="pl-2 md:pl-8">
                             <?php
-                            if (!isset($_GET['page'])) {
+                            if (!isset($_GET['page'])) {    
                                 $page = 1;
                             } else {
                                 $page = $_GET['page'];
