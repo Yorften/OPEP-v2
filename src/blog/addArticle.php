@@ -23,7 +23,7 @@ if (isset($_POST['submit'])) {
     $articleTag = mysqli_real_escape_string($conn, $_POST['tag']);
 
 
-    $insert = "INSERT INTO Articles (articleTitle,articleContent,userId,themeId,articleTag) VALUES (?,?,?,?,?)";
+    $insert = "INSERT INTO articles (articleTitle,articleContent,userId,themeId,articleTag) VALUES (?,?,?,?,?)";
     $stmt = $conn->prepare($insert);
 
     if ($stmt) {

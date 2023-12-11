@@ -67,7 +67,7 @@ if (isset($_GET['theme'])) {
     <div class="flex flex-col justify-between items-center">
         <div class="w-11/12 mx-auto article">
             <?php
-            $records = $conn->query("SELECT * FROM Articles WHERE themeId = $themeId AND isDeleted = 0");
+            $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId AND isDeleted = 0");
             $rows = $records->num_rows;
 
             $start = 0;

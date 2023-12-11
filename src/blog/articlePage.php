@@ -22,6 +22,9 @@ if (isset($_GET['article'])) {
         $articleContent = str_replace('&#10;', "<br>", $articleContent);
         $articleUser = $row['userId'];
         $articleTag = $row['articleTag'];
+        if($articleTag == NULL){
+            $articleTag = 'No tag';
+        }
         $themeId = $row['themeId'];
         $authorName = $row['userName'];
         $authorId = $row['userId'];
@@ -95,7 +98,7 @@ if (isset($_GET['article'])) {
                         </div>
                     <?php } ?>
                 </div>
-                <p id="content" class="p-4 md:p-8 pt-0"><?= $articleContent ?>  </p>
+                <p id="content" class="p-4 md:p-8 pt-0"><?= $articleContent ?> </p>
             </div>
         </div>
         <div class="flex flex-col mt-6">
@@ -109,7 +112,11 @@ if (isset($_GET['article'])) {
             <input type="hidden" name="sessionid" id="sessionid" value="<?= $userId ?>">
             <input type="hidden" name="articleid" id="articleid" value="<?= $articleId ?>">
             <div class="self-end">
-                <button id="addComment" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg">Comment</button>
+                <?php if (!isset($_SESSION['client_name']) && !isset($_SESSION['admin_name']) && !isset($_SESSION['administrator_name'])) { ?>
+                    <a href="../pages/login.php" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg">Comment</a>
+                <?php } else { ?>
+                    <button id="addComment" class="px-8 py-2 bg-gray-500 border border-gray-600 text-white font-semibold rounded-lg">Comment</button>
+                <?php } ?>
             </div>
         </div>
         <div id="comments" class="flex flex-col gap-4 w-[95%] mx-auto md:mx-0 md:w-4/5 mt-6 p-2 bg-[#f5f5f5] rounded-lg">

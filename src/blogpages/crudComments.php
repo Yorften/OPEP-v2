@@ -1,6 +1,7 @@
 <?php
 include '../includes/conn.php';
 session_start();
+
 $userId = $_SESSION['userId'];
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -23,7 +24,7 @@ if (!empty($data['commentContent'])) {
 
 if (!empty($data['newComment'])) {
     $commentContent = htmlspecialchars($data['newComment']);
-    $commentId = $data['commentId2'];
+    $commentId = $data['commentId3'];
 
     $update = "UPDATE comments SET commentContent = ? WHERE commentId = ?";
     $stmt = $conn->prepare($update);
@@ -78,7 +79,7 @@ if (!empty($data['articleId2'])) {
             $result2 = mysqli_query($conn, $user);
             $row2 = mysqli_fetch_assoc($result2);
             $userName = $row2['userName'];
-            if (($isDeleted == 1 && $userId == $userSession) || isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])) {
+            if (($isDeleted == 1 && $userId == $userSession) || ($isDeleted == 1 && (isset($_SESSION['admin_name']) || isset($_SESSION['administrator_name'])))) {
                 echo '
                 <div id="comment' . $commentId . '" class="flex flex-col w-full shadow-lg border-t-2 p-2 pl-4 bg-red-500/30">
                     <div class="flex w-full justify-between">

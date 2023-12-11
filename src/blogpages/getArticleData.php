@@ -54,7 +54,11 @@ if (isset($_GET["idTh"])) {
             }
             echo $output;
         } else {
-            echo $output .= "not found";
+            echo $output .= '
+            <div class="flex justify-center items-center w-full h-[60vh]">
+                <p>No articles found</p>
+            </div>
+            ';
         }
     } else {
         echo "Error: " . $conn->error;

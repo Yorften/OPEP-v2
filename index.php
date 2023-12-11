@@ -383,7 +383,7 @@ session_start();
         </div>
     </div>
 
-    <main class="h-[53.9vh] bg-[url('/OPEP-v2/src/images/hero.webp')] bg-cover bg-no-repeat">
+    <main class="h-[53.9vh] bg-cover bg-no-repeat " style="background-image: url(src/images/hero.webp);">
         <div class="flex flex-col items-start justify-center h-full w-[40%] ml-[10%] gap-4">
             <h1 class="text-[42px] text-white font-medium stroke-2 stroke-black">Your online shop for houseplants and
                 more!</h1>

@@ -67,6 +67,9 @@ if (!empty($data['articleId2'])) {
     $articleContent = str_replace('&#10;', "<br>", $articleContent);
     $articleUser = $row['userId'];
     $articleTag = $row['articleTag'];
+    if ($articleTag == NULL) {
+        $articleTag = 'No tag';
+    }
     $themeId = $row['themeId'];
     $authorName = $row['userName'];
     $authorId = $row['userId'];
@@ -109,7 +112,7 @@ if (!empty($data['articleId'])) {
     $content = htmlspecialchars($data['content']);
 ?>
     <input type="text" name="title" id="title" placeholder="Title" class="p-1 w-full text-2xl font-medium shadow-lg border-t-2 rounded-lg mt-8" value="<?= $title ?>">
-    <textarea name="content" id="content" cols="30" rows="17" placeholder="Article content" class="w-full shadow-md p-1 border-t-2 rounded-lg"><?= $content?></textarea>
+    <textarea name="content" id="content" cols="30" rows="17" placeholder="Article content" class="w-full shadow-md p-1 border-t-2 rounded-lg"><?= $content ?></textarea>
     <div class="flex flex-col w-full justify-center items-center md:justify-between md:flex-row">
         <select onchange="fetchTags()" name="theme" id="theme" class="block leading-5 text-gray-700 bg-white border-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300 w-[70%] md:w-[40%] h-[40px] md:mr-4">
             <option value="NULL" selected>None</option>

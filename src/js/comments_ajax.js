@@ -119,7 +119,7 @@ function applyNewComment(commentId, articleId) {
   };
   var newContent = {
     newComment: newComment,
-    commentId2: commentId,
+    commentId3: commentId,
   };
   console.log(newContent);
   var jsonData = JSON.stringify(newContent);
