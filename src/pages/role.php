@@ -43,6 +43,7 @@ if (isset($_POST['submit'])) {
         $stmt->close();
         $row = mysqli_fetch_assoc($result);
         $userName = $row['userName'];
+        $_SESSION['userId'] = $userId;
         $_SESSION['client_cart'] = $cartId;
         $_SESSION['client_name'] = $userName;
         header('location:../../index.php');
