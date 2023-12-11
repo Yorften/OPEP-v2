@@ -1,19 +1,21 @@
 <?php
-
 include "../includes/conn.php";
 session_start();
 
 if (isset($_GET['theme'])) {
     $themeId = htmlspecialchars($_GET['theme']);
-    $select = "SELECT * FROM themes WHERE themeId = $themeId AND themeDeleted = 0";
+    $select = "SELECT * FROM themes WHERE themeId = $themeId";
     $result = mysqli_query($conn, $select);
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $themeName = $row['themeName'];
-    } else {
-        header('Location:themes.php');
-    }
+    $row = mysqli_fetch_assoc($result);
+    $themeName = $row['themeName'];
 } else header('Location:themes.php');
+
+
+$tag;
+
+if (isset($_GET["tag"])) {
+    $tag = $_GET["tag"];
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,13 +30,16 @@ if (isset($_GET['theme'])) {
     <?php include("../includes/nav_blog.php"); ?>
     <header class="flex flex-col justify-between items-center h-[30vh] md:h-[40vh] py-8 bg-white shadow-lg text-center">
         <div class="flex justify-between items-center gap-4 sm:gap-4 md:w-[60%] mx-auto">
-            <h1 class="text-2xl md:text-3xl"><?= $themeName ?></h1>
-            <a href="addArticle.php?theme=<?= $themeId ?>" class="px-2 py-1 md:px-4 md:py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]">Add article +</a>
+            <h1 class="text-3xl"><?= $themeName ?></h1>
+            <a href="addArticle.php?theme=<?= $themeId ?>" class="px-4 py-2 bg-[#9fff30] font-semibold rounded-lg border-2 border-[#6da22f]">Add article +</a>
         </div>
         <div class="flex flex-wrap mx-auto justify-evenly w-[90%] md:w-[60%] child:mb-3">
             <div>
-                <input type="radio" id="all" name="tags" class="peer hidden" value="all" checked />
-                <label for="all" class="w-full p-1 px-4 border-2 rounded-xl select-none cursor-pointer peer-checked:border-amber-600 peer-checked:text-amber-600">
+                <input type="radio" id="all" name="tags" class="tag peer hidden" value="All" checked />
+                <label for="all" class="w-full p-1 px-4 border-2 rounded-xl select-none cursor-pointer 
+    <?php if ($tag == "All" || empty($tag)) {
+        echo 'peer-checked:border-amber-600 peer-checked:text-amber-600';
+    } ?>">
                     All
                 </label>
             </div>
@@ -49,25 +54,30 @@ if (isset($_GET['theme'])) {
                 $tagId = $row['tagId']
             ?>
                 <div>
-                    <input type="radio" id="Tag<?= $tagId ?>" name="tags" class="peer hidden" value="<?= $tagName ?>" />
-                    <label for="Tag<?= $tagId ?>" class="w-full p-1 border-2 rounded-xl select-none cursor-pointer peer-checked:border-amber-600 peer-checked:text-amber-600">
+                    <input type="radio" id="Tag<?= $tagId ?>" name="tags" class="tag peer hidden" value="<?= $tagName ?>" />
+                    <label for="Tag<?= $tagId ?>" class="w-full p-1 border-2 rounded-xl cursor-pointer  <?php if ($tag == $tagName) {
+                                                                                                            echo 'border-amber-600 text-amber-600';
+                                                                                                        } ?>">
                         <?= $tagName ?>
                     </label>
                 </div>
+
             <?php }
             ?>
         </div>
-        <div class="flex items-center justify-center bg-gray-100 rounded border border-gray-200 mt-4 w:3/4 md:w-1/4 mx-auto">
+        <div class="flex items-center justify-center bg-gray-100 rounded border border-gray-200 mt-4 w-1/4 mx-auto">
             <input id="search-bar" type="text" name="search" placeholder="Search" class="flex items-center align-middle justify-center bg-transparent py-1 text-gray-600 px-4 focus:outline-none w-full" />
             <button class="py-2 px-4 bg-[#bdff72] text-black rounded-r border-l border-gray-200 hover:bg-gray-50 active:bg-gray-200 disabled:opacity-50 inline-flex items-center focus:outline-none">
                 Search
             </button>
         </div>
     </header>
-    <div class="flex flex-col justify-between items-center">
+    <div class="flex flex-col justify-between items-center h-[90vh]">
         <div class="w-11/12 mx-auto article">
             <?php
-            $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId AND isDeleted = 0");
+
+            $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId");
+
             $rows = $records->num_rows;
 
             $start = 0;
@@ -77,21 +87,41 @@ if (isset($_GET['theme'])) {
                 $start = $page * $rows_per_page;
             }
 
-            $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ? AND isDeleted = 0 LIMIT ?,?";
+            $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = ?";
+            $params = ['i', $themeId];
+
+            if (isset($_GET['tag']) && !empty($_GET['tag']) && $_GET['tag'] != "All") {
+                $tagItem = $_GET['tag'];
+                $select .= " AND articleTag = ?";
+                $params[0] .= 's';
+                $params[] = $tagItem;
+            }
+            $select .= " LIMIT ?, ?";
+            $params[0] .= 'ii';
+            $params[] = $start;
+            $params[] = $rows_per_page;
+
             $stmt = $conn->prepare($select);
-            $stmt->bind_param("iii", $themeId, $start, $rows_per_page);
+
+            $types = $params[0];
+            $stmt->bind_param($types, ...array_slice($params, 1));
             $stmt->execute();
             $result = $stmt->get_result();
+
+
+            $rows = $result->num_rows;
             $pages = ceil($rows / $rows_per_page);
             if ($rows > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
+
                     $articleId = $row['articleId'];
                     $articleTitle = $row['articleTitle'];
                     $articleContent = $row['articleContent'];
                     $userName = $row['userName'];
                     $articleTag = $row['articleTag'];
                     // get first 30 words from article
-                    $articleDesc = substr($articleContent, 0, 210);
+                    $words = explode(' ', $articleContent);
+                    $articleDesc = implode(' ', array_slice($words, 0, 30));
 
             ?>
                     <div class=" bg-white shadow-lg shadow-gray-300 m-4 p-4 rounded-lg">

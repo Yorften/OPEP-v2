@@ -20,7 +20,10 @@ searchbar.addEventListener("input", function (event) {
 function displayDataArticle(idTh, search) {
   let xhr = new XMLHttpRequest();
   if (search) {
-    xhr.open("GET",`../blogpages/getArticleData.php?search=${search}&idTh=${idTh}`);
+    xhr.open(
+      "GET",
+      `../blogpages/getArticleData.php?search=${search}&idTh=${idTh}`
+    );
   } else {
     xhr.open("GET", `../blogpages/getArticleData.php?idTh=${idTh}`);
   }
@@ -34,3 +37,24 @@ function displayDataArticle(idTh, search) {
 
   xhr.send();
 }
+const tags = document.querySelectorAll(".tag");
+
+tags.forEach((item) => {
+  item.addEventListener("click", (event) => {
+    event.preventDefault();
+    const tagValue = event.target.value;
+    event.target.checked = true;
+    const tagUrl = url.searchParams.get("tag");
+    let newURL;
+    console.log(tagValue);
+    if (tagUrl) {
+      url.searchParams.set("tag", tagValue);
+      newURL = url.href;
+    } else {
+      url.searchParams.append("tag", tagValue);
+      newURL = url.href;
+    }
+
+    window.location.assign(newURL);
+  });
+});
