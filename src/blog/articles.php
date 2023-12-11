@@ -76,7 +76,7 @@ if (isset($_GET["tag"])) {
         <div class="w-11/12 mx-auto article">
             <?php
             if (isset($_GET['tag']) && $_GET['tag'] != 'All') {
-                $records = "SELECT * FROM articles WHERE themeId = $themeId AND articleTag = ?";
+                $records = "SELECT * FROM articles WHERE themeId = $themeId AND articleTag = ? AND isDeleted = 0";
                 $stmt = $conn->prepare($records);
                 $stmt->bind_param("s", $_GET['tag']);
                 $stmt->execute();
@@ -92,14 +92,14 @@ if (isset($_GET["tag"])) {
 
 
 
-                $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = $themeId AND articleTag = ? LIMIT ?,?";
+                $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = $themeId AND articleTag = ? AND isDeleted = 0 LIMIT ?,?";
                 $stmt = $conn->prepare($select);
                 $stmt->bind_param("sii", $_GET['tag'], $start, $rows_per_page);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $pages = ceil($rows / $rows_per_page);
             } else {
-                $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId");
+                $records = $conn->query("SELECT * FROM articles WHERE themeId = $themeId AND isDeleted = 0");
                 $rows = $records->num_rows;
 
                 $start = 0;
@@ -109,7 +109,7 @@ if (isset($_GET["tag"])) {
                     $start = $page * $rows_per_page;
                 }
 
-                $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = $themeId LIMIT ?,?";
+                $select = "SELECT * FROM articles JOIN users ON articles.userId = users.userId WHERE themeId = $themeId AND isDeleted = 0 LIMIT ?,?";
                 $stmt = $conn->prepare($select);
                 $stmt->bind_param("ii", $start, $rows_per_page);
                 $stmt->execute();
